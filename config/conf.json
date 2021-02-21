@@ -1,0 +1,9 @@
+{
+    "defaultPrefix": {
+        "production": "&",
+        "development": "&"
+    },
+    "embedColors": {
+        "default": "#2f3136"
+    }
+}
