@@ -1,6 +1,7 @@
 import Discord from "discord.js"
 import Command from "../../classes/Command"
 import { User, Feedback } from '../../db/models';
+import getUser from "../../utils/eggRetrievalService";
 
 const Cmd = new Command({
     enabled: true,
@@ -10,7 +11,6 @@ const Cmd = new Command({
     usage: "givepass [mention] [amount]",
     category: "dev"
 }, async (client, message, args, config) => {
-    // TODO: make configurable
     if(!message.member.roles.cache.has('660914705170169857')) return message.channel.send("No permission.")
 
     let usr = message.mentions.members.first()
@@ -18,8 +18,7 @@ const Cmd = new Command({
     if(!args[1]) return message.reply("Please specify an amount of passes. &givepass [mention] [amount]")
     if(isNaN(parseInt(args[1]))) return message.reply("That's not a number you egg. &givepass [mention] [amount]")
 
-    let egg = await User.findOne({ where: { userId: usr.user.id } })
-    if(!egg) egg = await User.create({ userId: usr.user.id, points: 0, lifetime: 0 })
+    let egg = await getUser(message.author.id)
 
     egg.points += args[1];
     await egg.save()

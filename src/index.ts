@@ -3,6 +3,7 @@ import * as dotenv from "dotenv";
 import * as fs from "fs";
 import * as path from "path";
 import { YarnGlobals, YarnCommandObject } from "./utils/types"
+import omelettes from "./utils/omelettes";
 import config from "../config/conf.json";
 import { Feedback } from "./db/models";
 import Command from "./classes/Command";
@@ -60,8 +61,6 @@ function loadCommands(directory: string): void {
 console.log("🥚 - Loading commands..")
 loadCommands(path.join(__dirname, 'commands'))
 
-let omelettes: String[] = ["omelette", "omelete", "ommelete", "ommelett", "omelet", "omlet", "omlette", "omlete", "ommlete", "omlett", "ommlett"]
-
 client.on('ready', () => {
     let guildAmount = client.guilds.cache.size
     client.user?.setActivity(`Ping! - ${globals.prefix}help`, {type: 'WATCHING'})
@@ -86,6 +85,10 @@ client.on('message', (message: Discord.Message) => {
     if(!cmd) return;
     if(!cmd.meta.enabled) return;
     cmd.run(client, message, args, globals)
+})
+
+client.on('messageUpdate', async (message) => {
+    if(omelettes.includes(message.content.toLowerCase())) return message.react(":no_omelette_zone:806549873037934613")
 })
 
 client.on('messageDelete', async (message) => {

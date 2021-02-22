@@ -1,6 +1,7 @@
 import Discord from "discord.js"
 import Command from "../../classes/Command"
 import { User, Feedback } from '../../db/models';
+import getUser from "../../utils/eggRetrievalService";
 
 const Cmd = new Command({
     enabled: true,
@@ -12,8 +13,7 @@ const Cmd = new Command({
 }, async (client, message, args, config) => {
     if(!args[0]) return message.channel.send("Please provide a link to get feedback on! &getfeedback [url]")
     
-    let egg = await User.findOne({ where: { userId: message.author.id } })
-    if(!egg) egg = await User.create({ userId: message.author.id, points: 0, lifetime: 0 })
+    let egg = await getUser(message.author.id)
 
     // License check
     if(!message.member.roles.cache.has('672831766733783055') && egg.points - 1 < 0){

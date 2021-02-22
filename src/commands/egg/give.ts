@@ -2,6 +2,7 @@ import Discord from "discord.js";
 import dayjs from "dayjs";
 import Command from "../../classes/Command";
 import { Feedback, User } from '../../db/models';
+import getUser from "../../utils/eggRetrievalService";
 
 const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
 
@@ -15,8 +16,7 @@ const Cmd = new Command({
 }, async (client, message, args, config) => {
     if(!args[0]) return message.channel.send("Please provide a feedback ID. &givefeedback [id] [feedback]")
     
-    let egg = await User.findOne({ where: { userId: message.author.id } })
-    if(!egg) egg = await User.create({ userId: message.author.id, points: 0, lifetime: 0 })
+    let egg = await getUser(message.author.id)
 
     let feedbackId = await Feedback.findOne({ where: { messageId: args[0] }})
     if(!feedbackId) return message.channel.send("Invalid feedback ID.")

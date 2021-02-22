@@ -1,6 +1,7 @@
 import Discord from "discord.js"
 import Command from "../../classes/Command"
 import { User } from '../../db/models';
+import getUser from "../../utils/eggRetrievalService";
 
 const Cmd = new Command({
     enabled: true,
@@ -12,14 +13,8 @@ const Cmd = new Command({
 }, async (client, message, args, config) => {
     if(message.member.roles.cache.has('672831766733783055')) return message.channel.send(`You have infinite licenses, you egg.`)
     
-    let egg = await User.findOne({ where: { userId: message.author.id } })
-    if(!egg) {
-        let newEgg = User.build({ userId: message.author.id, points: 0, lifetime: 0 })
-        await newEgg.save()
-        return message.channel.send(`You have \`${newEgg.points}\` license(s)!`)
-    } else {
-        return message.channel.send(`You have \`${egg.points}\` license(s)!`)
-    }
+    let egg = await getUser(message.author.id)
+    return message.channel.send(`You have \`${egg.points}\` license(s)!`)
 })
 
 export default Cmd
