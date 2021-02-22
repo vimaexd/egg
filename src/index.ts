@@ -68,7 +68,9 @@ client.on('ready', () => {
 })
 
 client.on('message', (message: Discord.Message) => {
-    if(omelettes.includes(message.content.toLowerCase())) return message.react(":no_omelette_zone:806549873037934613")
+    let haha_no = message.content.replace(" ", "").toLowerCase()
+    if(omelettes.includes(haha_no)) return message.react(":no_omelette_zone:806549873037934613")
+    
     if(!message.content.startsWith(globals.prefix)) return;
     if(message.author.bot) return;
     if(message.channel.type == "dm") return;
@@ -88,7 +90,8 @@ client.on('message', (message: Discord.Message) => {
 })
 
 client.on('messageUpdate', async (message) => {
-    if(omelettes.includes(message.content.toLowerCase())) return message.react(":no_omelette_zone:806549873037934613")
+    let haha_no = message.content.replace(" ", "").toLowerCase()
+    if(omelettes.includes(haha_no)) return message.react(":no_omelette_zone:806549873037934613")
 })
 
 client.on('messageDelete', async (message) => {
