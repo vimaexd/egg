@@ -9,7 +9,7 @@ const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
 const Cmd = new Command({
     enabled: true,
     name: "give",
-    trigger: ["f", "givefeedback", "give"],
+    trigger: ["f", "givefeedback", "give", "feedback"],
     description: "Give feedback!",
     usage: "givefeedback [id] [feedback]",
     category: "Egg"
