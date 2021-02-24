@@ -86,7 +86,6 @@ client.on('message', (message: Discord.Message) => {
 
     if(!cmd) return;
     if(!cmd.meta.enabled) return;
-
     cmd.run(client, message, args, globals)
 })
 

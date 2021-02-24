@@ -4,7 +4,7 @@ import Command from "../../classes/Command"
 const Cmd = new Command({
     enabled: true,
     name: "help",
-    trigger: ["help", "how"],
+    trigger: ["help"],
     description: "Get a list of commands that the bot has",
     usage: "help <command>",
     category: "Tools"

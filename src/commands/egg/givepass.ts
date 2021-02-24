@@ -13,20 +13,17 @@ const Cmd = new Command({
 }, async (client, message, args, config) => {
     if(!message.member.roles.cache.has('660914705170169857')) return message.channel.send("No permission.")
 
-    // Did Dalux specify a user? find out in Flute Gang: The Anime (Episode 6)
-    let usr: Discord.User = message.mentions.members.first().user
-    if(!usr) usr = await client.users.fetch(args[0])
+    let usr = message.mentions.members.first()
     if(!usr) return message.reply("Please mention a user to give passes to. &givepass [mention] [amount]")
-
     if(!args[1]) return message.reply("Please specify an amount of passes. &givepass [mention] [amount]")
     if(isNaN(parseInt(args[1]))) return message.reply("That's not a number you egg. &givepass [mention] [amount]")
 
-    let egg = await getUser(usr.id)
+    let egg = await getUser(message.author.id)
 
-    egg.points += +args[1];
+    egg.points += args[1];
     await egg.save()
 
-    message.channel.send(`Gave ${usr.tag} ${args[1]} license! They now have ${egg.points} licenses.`)
+    message.channel.send(`Gave ${usr.user.tag} ${args[1]} license! They now have ${egg.points} licenses.`)
 })
 
 
