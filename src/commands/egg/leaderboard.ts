@@ -7,11 +7,11 @@ import { YarnGlobals } from "../../utils/types";
 const getLbEmoji = async (placement: string): Promise<string> => {
     switch(placement) {
         case "1":
-            return "<:eggth:805539392940539925>"
+            return ":first_place:"
         case "2":
-            return "<:egg_swag:743920508483010691>"
+            return ":second_place:"
         case "3":
-            return ":egg:"
+            return ":third_place:"
         default:
             return ""
     }

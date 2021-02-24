@@ -23,7 +23,7 @@ const Cmd = new Command({
 
     // Url validation (regex yoinked straight outta stackoverflow)
     let urlRE = new RegExp("([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?(/.*)?")
-    if(!urlRE.test(args.join(" "))) return message.channel.send("Your message does not contain a link. &getfeedback [url]")
+    if(!urlRE.test(args.join(" "))) return message.channel.send("Submit a link, you egg <:moai_law:695179043867197490> Ideally use unlisted Soundcloud, Imgur, & YouTube links for music, drawings, and videos respectively.")
 
     Feedback.create({ messageId: message.id, given: false })
     if(!message.member.roles.cache.has('672831766733783055')) egg.points--;
