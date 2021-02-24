@@ -41,9 +41,11 @@ const Cmd = new Command({
 
     if(fbMsg.author.id == message.author.id) return message.channel.send("You can't give feedback to yourself!")
 
-    // Length check
+    // Length check + parse out emojis
+    let customEmojiRE = /<a?:.+?:.+?>/gm // MAKE IT STOP PLEASE PLEASE HELP AAAAAAAA
     let minLength = 150;
     let feedback = args.slice(1).join(" ");
+    feedback = feedback.replace(customEmojiRE, "_")
     if(feedback.length < minLength) return message.channel.send(`Please don't give lazy feedback. Be more descriptive (${minLength} characters minimum)`)
 
     // Time check
