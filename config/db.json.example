@@ -1,3 +1,6 @@
+[DELETE THIS BEFORE USE]
+Put your PostgreSQL credentials in here.
+
 {
     "server": "",
     "port": "",
