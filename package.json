@@ -1,6 +1,6 @@
 {
   "name": "eggbot",
-  "version": "1.0.0",
+  "version": "1.5.0",
   "description": "haha egg",
   "main": "index.js",
   "repository": "https://github.com/etstringy/eggbot",
@@ -22,7 +22,8 @@
     "node-fetch": "^2.6.1",
     "pg": "^8.5.1",
     "sequelize": "^6.5.0",
-    "typescript": "^4.1.3"
+    "typescript": "^4.1.3",
+    "validator": "^13.5.2"
   },
   "devDependencies": {
     "ts-node-dev": "^1.1.1"
