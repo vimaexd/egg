@@ -17,9 +17,9 @@ const getLbEmoji = async (placement: string): Promise<string> => {
     }
 }
 
-const getLbEmbed = async (client: Discord.Client, config: YarnGlobals, users: any, page: number): Promise<MessageEmbed> => {
+const getLbEmbed = async (client: Discord.Client, config: YarnGlobals, users: any, page: number, guildName: string): Promise<MessageEmbed> => {
     let mbed = new Discord.MessageEmbed()
-    .setTitle("Leaderboard")
+    .setTitle(`Leaderboard in ${guildName}`)
     .setColor(config.config.embedColors.default)
     .setDescription(`Page ${page + 1}`)
 
@@ -60,7 +60,7 @@ const Cmd = new Command({
     })
     if(users.length == 0) message.channel.send("No one has sent feedback yet!")
 
-    let mbed = await getLbEmbed(client, config, users, page);
+    let mbed = await getLbEmbed(client, config, users, page, message.guild.name);
     let botMsg = await message.channel.send({embed: mbed})
     message.channel.stopTyping()
 
@@ -84,7 +84,7 @@ const Cmd = new Command({
             return page--;
         }
 
-        mbed = await getLbEmbed(client, config, users, page);
+        mbed = await getLbEmbed(client, config, users, page, message.guild.name);
 
         await botMsg.edit({embed: mbed})
         reaction.users.remove(message.author.id)

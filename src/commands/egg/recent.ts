@@ -14,7 +14,8 @@ const Cmd = new Command({
     let recents = await Feedback.findAll({
         limit: 5,
         where: {
-            given: false
+            given: false,
+            guildId: message.guild.id
         },
         order: [
             ['updatedAt', 'DESC'],
@@ -23,7 +24,7 @@ const Cmd = new Command({
 
     if(recents.length == 0 || args[0] == "all") {
         isRecent = true;
-        recents = await Feedback.findAll({ limit: 5, order: [['updatedAt', 'DESC']] })
+        recents = await Feedback.findAll({ limit: 5, order: [['updatedAt', 'DESC']], where: { guildId: message.guild.id } })
     } else {
         isRecent = false;
     }
@@ -32,7 +33,7 @@ const Cmd = new Command({
     isRecent ? recentText = "Showing recent submissions" : recentText = "Showing recent submissions with no feedback";
 
     let mbed = new Discord.MessageEmbed()
-        .setTitle("Latest submissions")
+        .setTitle(`Latest submissions in ${message.guild.name}`)
         .setColor(config.config.embedColors.default)
         .setDescription(recentText)
 

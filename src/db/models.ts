@@ -2,6 +2,7 @@ import { BIGINT, BOOLEAN, STRING } from 'sequelize';
 import db from "./db";
 
 let User = db.define('users', {
+    guildId: STRING,
     userId: STRING, 
     points: STRING,
     lifetime: {
@@ -11,11 +12,13 @@ let User = db.define('users', {
 });
 
 let Feedback = db.define('feedback', {
+    guildId: STRING,
     messageId: STRING,
     given: BOOLEAN
 });
 
 let Config = db.define('config', {
+    guildId: STRING,
     key: STRING,
     value: STRING
 });

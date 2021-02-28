@@ -20,4 +20,5 @@ export interface YarnConfig {
     embedColors: {
         default: string;
     }
+    ownerId: string;
 }

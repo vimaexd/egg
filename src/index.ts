@@ -3,7 +3,7 @@ import * as dotenv from "dotenv";
 import * as fs from "fs";
 import * as path from "path";
 import { YarnGlobals, YarnCommandObject } from "./utils/types"
-import omelettes from "./utils/omelettes";
+import detectEasterEgg from "./utils/omelettes";
 import config from "../config/conf.json";
 import { Feedback } from "./db/models";
 import Command from "./classes/Command";
@@ -68,8 +68,7 @@ client.on('ready', () => {
 })
 
 client.on('message', (message: Discord.Message) => {
-    let haha_no = message.content.replace(" ", "").toLowerCase()
-    if(omelettes.includes(haha_no)) return message.react(":no_omelette_zone:806549873037934613")
+    detectEasterEgg(message);
     
     if(!message.content.startsWith(globals.prefix)) return;
     if(message.author.bot) return;
@@ -91,8 +90,7 @@ client.on('message', (message: Discord.Message) => {
 })
 
 client.on('messageUpdate', async (message) => {
-    let haha_no = message.content.replace(" ", "").toLowerCase()
-    if(omelettes.includes(haha_no)) return message.react(":no_omelette_zone:806549873037934613")
+    detectEasterEgg(message);
 })
 
 client.on('messageDelete', async (message) => {

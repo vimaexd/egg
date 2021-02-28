@@ -16,9 +16,9 @@ const Cmd = new Command({
 }, async (client, message, args, config) => {
     if(!args[0]) return message.channel.send("Please provide a feedback ID. &givefeedback [id] [feedback]")
     
-    let egg = await getUser(message.author.id)
+    let egg = await getUser(message.author.id, message.guild.id)
 
-    let feedbackId = await Feedback.findOne({ where: { messageId: args[0] }})
+    let feedbackId = await Feedback.findOne({ where: { messageId: args[0], guildId: message.guild.id }})
     if(!feedbackId) return message.channel.send("Invalid feedback ID.")
 
 
@@ -49,9 +49,10 @@ const Cmd = new Command({
     if(feedback.length < minLength) return message.channel.send(`Please don't give lazy feedback. Be more descriptive (${minLength} characters minimum)`)
 
     // Time check
+    let lastsFor = 7 // ( ͡° ͜ʖ ͡°)
     let currentTime = dayjs().unix()
-    let expireTime = dayjs(fbMsg.createdTimestamp).add(3, 'day').unix()
-    if(currentTime > expireTime) return message.channel.send("This submission is over 3 days old and cannot be feedbacked anymore.")
+    let expireTime = dayjs(fbMsg.createdTimestamp).add(lastsFor, 'day').unix()
+    if(currentTime > expireTime) return message.channel.send(`This submission is over ${lastsFor} days old and cannot be feedbacked anymore.`)
 
     // Deletion check
     await delay(500)

@@ -4,7 +4,7 @@ import Command from "../../classes/Command"
 const Cmd = new Command({
     enabled: true,
     name: "help",
-    trigger: ["help", "how"],
+    trigger: ["help", "how", "h"],
     description: "Get a list of commands that the bot has",
     usage: "help <command>",
     category: "Tools"
@@ -25,13 +25,6 @@ const Cmd = new Command({
         embed.addField("Aliases", cmd.meta.trigger.map(a => (`\`${a}\``)).join(" "))
         message.channel.send({embed: embed})
     } else {
-        let categories: Array<string> = []
-        globals.commands.forEach((v: Command, k: string) => {
-            if(v.meta.category == "dev") return;
-            if(v.meta.category == "perserver") return;
-            (categories.indexOf(v.meta.category) !== -1) ? void(0) : categories.push(v.meta.category)
-        })
-    
         let desc = `:pushpin: Check the channel pins for an explanation on what each command does.
         :innocent: Please follow the channel rules! Mods can revoke access if they are not followed.
         `
@@ -42,9 +35,12 @@ const Cmd = new Command({
             // .setDescription("type !!help [command] to get info on a certain command")
             .setDescription(desc)
 
-        let names: Array<string> = []
-        globals.commands.forEach((v: Command, k: string) => { names.push(v.meta.name) })
-        embed.addField("Commands", names.map(n => `\`${n}\``).join(" "), true)
+        let categories: Array<string> = []
+        globals.commands.forEach((v: Command, k: string) => { 
+            if(v.meta.category == "dev") return;
+            categories.push(v.meta.name);
+        })
+        embed.addField("Commands", categories.map(n => `\`${n}\``).join(" "), true)
         
         message.channel.send({embed: embed})
     }

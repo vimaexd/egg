@@ -5,11 +5,11 @@ import getUser from "../../utils/eggRetrievalService";
 
 const Cmd = new Command({
     enabled: true,
-    name: "givepass",
-    trigger: ["givepass"],
-    description: "Give passes to people. Staff only",
-    usage: "givepass [mention] [amount]",
-    category: "dev"
+    name: "givelicense",
+    trigger: ["givepass", "givelicense"],
+    description: "Give passes to people, only usable by configured Staff role",
+    usage: "givelicense [mention] [amount]",
+    category: "Tools"
 }, async (client, message, args, config) => {
     if(!message.member.roles.cache.has('660914705170169857')) return message.channel.send("No permission.")
 
@@ -21,7 +21,7 @@ const Cmd = new Command({
     if(!args[1]) return message.reply("Please specify an amount of passes. &givepass [mention] [amount]")
     if(isNaN(parseInt(args[1]))) return message.reply("That's not a number you egg. &givepass [mention] [amount]")
 
-    let egg = await getUser(usr.id)
+    let egg = await getUser(usr.id, message.guild.id)
 
     egg.points += +args[1];
     await egg.save()

@@ -13,7 +13,7 @@ const Cmd = new Command({
 }, async (client, message, args, config) => {
     if(message.member.roles.cache.has('672831766733783055')) return message.channel.send(`You have infinite licenses, you egg.`)
     
-    let egg = await getUser(message.author.id)
+    let egg = await getUser(message.author.id, message.guild.id)
     return message.channel.send(`You have \`${egg.points}\` license(s)!`)
 })
 
