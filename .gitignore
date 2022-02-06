@@ -1,10 +1,7 @@
-node_modules/
-dist/
-build/
-
+src/legacy
+yarn.lock
 yarn-error.log
-prompt.txt
-
-# no credentials for you c:
 .env
-config/db.json
+config/conf.json
+node_modules
+data
