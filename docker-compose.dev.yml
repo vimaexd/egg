@@ -2,3 +2,5 @@ services:
   bot:
     environment:
       - NODE_ENV=development
+    volumes:
+      - ./packages/egg/src/db/migrations:/app/packages/egg/src/db/migrations

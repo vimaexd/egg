@@ -23,4 +23,10 @@ model GuildRoleMenuOption {
 model Guild {
   id        String          @id
   roleMenu  GuildRoleMenuOption[]
+
+  // RATIO BATTLES
+  rbEnabled Boolean         @default(false)
+
+  // REACTION WORDS
+  rwEnabled Boolean         @default(false)
 }

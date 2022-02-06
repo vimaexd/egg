@@ -2,6 +2,7 @@ import Discord from "discord.js";
 import { YarnGlobals } from "../utils/types";
 
 import detectRatio from '../utils/ratio';
+import getGuild from "../db/utils/getGuild";
 
 const FUNNY_WORDS: any = {
   "marwan": "<:FlushedMarwan:814408259083304990>",       // marwan
@@ -15,8 +16,10 @@ export default async (message: Discord.Message, client: Discord.Client, globals:
   if(message.partial) return;
   
   Object.keys(FUNNY_WORDS)
-    .forEach((k) => {
+    .forEach(async (k) => {
       if(new RegExp(k).test(message.content.toLowerCase())){
+        const guild = await getGuild(message.guild);
+        if(!guild.rwEnabled) return;
         try {
           message.react(FUNNY_WORDS[k]);
         } catch {

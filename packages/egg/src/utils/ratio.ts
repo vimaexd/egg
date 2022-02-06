@@ -1,6 +1,7 @@
 import Discord, { Guild, Message, ReactionEmoji, TextChannel, User } from "discord.js"
 import dayjs from "dayjs";
 import { YarnGlobals } from "./types";
+import getGuild from "../db/utils/getGuild";
 
 const RATIO_INSULTS = [
   "Probably subscribed to Dalux",
@@ -48,8 +49,6 @@ let lastRatioTimestamp: Map<Guild, number> = new Map<Guild, number>();
  * Detect ratios
  */
 export default async (message: Discord.Message, client: Discord.Client, globals: YarnGlobals) => {
-  
-  // #chat only
   if (!message.channel.isText) return;
   if (message.author.bot) return;
   if ((message.channel as TextChannel).name !== "chat") return;
@@ -67,6 +66,9 @@ export default async (message: Discord.Message, client: Discord.Client, globals:
     lastRatioTimestamp.has(message.guild) &&
     message.createdTimestamp - lastRatioTimestamp.get(message.guild) < ratioCooldown
   ) return;
+
+  const guild = await getGuild(message.guild);
+  if(!guild.rbEnabled) return;
 
   message.react(ratioEmoji);
   counter.react(ratioEmoji);
@@ -99,4 +101,9 @@ export default async (message: Discord.Message, client: Discord.Client, globals:
   }
 
   setTimeout(declareWinner, 20 * 1000)
+}
+
+export {
+  lastRatioTimestamp,
+  ratioCooldown
 }
