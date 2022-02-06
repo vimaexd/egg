@@ -8,7 +8,7 @@ const FUNNY_WORDS: any = {
   "nick": "<:SusSpy:806933723576533023>",                // nick
   "^(?=.*\\bskill\\b)(?=.*\\bissue\\b).*$": "💀",        // skill issue
   "get real": "<:skullrealistic:902391812403130408>",    // get real
-  "[ou](m+)[ea](l+)e(t+)(e?)": "🍳"                      // omelette
+  "[ou]m+[ea]?l+et+(e?)": "🍳"                      // omelette
 }
 
 export default async (message: Discord.Message, client: Discord.Client, globals: YarnGlobals) => {
