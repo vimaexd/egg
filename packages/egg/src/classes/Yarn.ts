@@ -29,7 +29,13 @@ export default class Yarn {
     (process.env.NODE_ENV === "production") ? this.globals.env = "production" : this.globals.env = "development";
 
     // Client
-    this.client = new Discord.Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
+    this.client = new Discord.Client({ 
+      intents: [
+        Intents.FLAGS.GUILDS, 
+        Intents.FLAGS.GUILD_MESSAGES,
+        Intents.FLAGS.GUILD_MESSAGE_REACTIONS
+      ] 
+    });
 
     // Other Globals
     this.globals.db = new PrismaClient()

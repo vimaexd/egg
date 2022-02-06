@@ -5,3 +5,4 @@ yarn-error.log
 config/conf.json
 node_modules
 data
+package-lock.json
