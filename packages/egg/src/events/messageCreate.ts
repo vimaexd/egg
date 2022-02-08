@@ -9,7 +9,7 @@ const FUNNY_WORDS: any = {
   "nick": "<:SusSpy:806933723576533023>",                // nick
   "^(?=.*\\bskill\\b)(?=.*\\bissue\\b).*$": "💀",        // skill issue
   "get real": "<:skullrealistic:902391812403130408>",    // get real
-  "[ou]m+[ea]?l+et+(e?)": "🍳"                      // omelette
+  "[oøu]m+[eaæ]?l+[æea]t+e?": "🍳"                      // omelette
 }
 
 export default async (message: Discord.Message, client: Discord.Client, globals: YarnGlobals) => {
@@ -21,8 +21,9 @@ export default async (message: Discord.Message, client: Discord.Client, globals:
         const guild = await getGuild(message.guild);
         if(!guild.rwEnabled) return;
         try {
-          message.react(FUNNY_WORDS[k]);
-        } catch {
+          await message.react(FUNNY_WORDS[k]);
+        } catch(err) {
+          console.log("reaction failed - " + err)
           // failed to react :(
         }
       }
