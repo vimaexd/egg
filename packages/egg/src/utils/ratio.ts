@@ -89,8 +89,9 @@ export default async (message: Discord.Message, client: Discord.Client, globals:
 
     const theFunnyNumber = Math.round(Math.random() * 7) + 1;
 
-    let V_RATIO_INSULTS = RATIO_INSULTS;
+    let V_RATIO_INSULTS = RATIO_INSULTS.slice(); // clone array 
     let insults = '';
+    
     for(let i = 0; i < theFunnyNumber; i++){
       let insult = V_RATIO_INSULTS[Math.floor(Math.random()*V_RATIO_INSULTS.length)];
       insults += ` + ${insult}`

@@ -41,8 +41,8 @@ export default async (event: any, client: Discord.Client, globals: YarnGlobals) 
               text: `${dayjs.tz(dayjs(), "Europe/Oslo").format('HH:mm:ss DD/MM/YYYY')}`
             })
     
-        log_channel.send({embeds: [emojEmbed]})
+        await log_channel.send({embeds: [emojEmbed]})
     } catch(err) {
-        console.log("epic embed fail")
+      console.log("react log failed - " + err)
     }
 }

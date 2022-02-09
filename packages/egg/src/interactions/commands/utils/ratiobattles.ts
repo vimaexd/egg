@@ -60,7 +60,8 @@ const Cmd = new Command({
       ) {
         return interaction.reply(`✅ The ratio cooldown has expired! Waiting on a Ratio Battle message...`)
       } else {
-        interaction.reply(`🕒 The ratio cooldown expires <t:${lastRatioTimestamp.get(interaction.guild) + ratioCooldown}:R> (<t:${lastRatioTimestamp.get(interaction.guild) + ratioCooldown}>)`)
+        const cooldownUnixSec = Math.floor(lastRatioTimestamp.get(interaction.guild) + ratioCooldown * 1000)
+        interaction.reply(`🕒 The ratio cooldown expires <t:${cooldownUnixSec}:R> (<t:${cooldownUnixSec}>)`)
       }
       break;
     case "reset":
@@ -72,7 +73,7 @@ const Cmd = new Command({
         const btnInteraction = (newInteraction as ButtonInteraction);
         if(!btnInteraction.message.interaction) return;
         if(interaction.id != btnInteraction.message.interaction.id) return;
-        if(btnInteraction.member.user.id != interaction.member.user.id) return btnInteraction.reply("You can't push that!")
+        if(btnInteraction.member.user.id != interaction.member.user.id) return btnInteraction.reply({"content": "You can't push that!", ephemeral: true})
         
         switch(btnInteraction.customId){
           case "no":
@@ -88,7 +89,7 @@ const Cmd = new Command({
         }
       })
       await interaction.reply({
-        content: `Are you sure you want to do remove this role button?`,
+        content: `Are you sure you want to reset the ratio battle cooldown?`,
         components: [new Discord.MessageActionRow().addComponents([deleteBtn, noBtn])]
       })
       break;
