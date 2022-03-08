@@ -72,14 +72,14 @@ export default async (message: Discord.Message, client: Discord.Client, globals:
   if (message.author.bot) return;
   if ((message.channel as TextChannel).name !== "chat") return;
 
-  if (!prompt_words.some(w => message.content.startsWith(w))) return;
+  if (!prompt_words.some(w => message.content.toLowerCase().startsWith(w))) return;
   if (!message.reference) return;
 
   const counter = await message.fetchReference();
   if (message.createdTimestamp - counter.createdTimestamp > 5 * 60000) return;
   if (counter.author.bot) return;
   if (counter.author.id == message.author.id) return;
-  if (!prompt_words.some(w => counter.content.startsWith(w))) return;
+  if (!prompt_words.some(w => counter.content.toLowerCase().startsWith(w))) return;
 
 
   if (
@@ -108,7 +108,11 @@ export default async (message: Discord.Message, client: Discord.Client, globals:
 
     let loser = (originalRatios > counterRatios) ? counter : message;
     let winner = (originalRatios > counterRatios) ? message : counter;
-    if(loser.id == "577743466940071949") loser = winner;
+    if(loser.author.id == "577743466940071949") {
+      let temp = winner;
+      winner = loser;
+      loser = temp;
+    }
 
     const theFunnyNumber = Math.round(Math.random() * 7) + 1;
 
