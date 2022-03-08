@@ -1,13 +1,15 @@
-import { Prisma, Guild, GuildRoleMenuOption } from "@prisma/client";
+import { Prisma, Guild, GuildRoleMenuOption, RatioBattleResult } from "@prisma/client";
 import { Guild as DiscordGuild } from "discord.js";
 import { bot } from '../../index';
 
 type GuildExtras = Guild & {
-  roleMenu: GuildRoleMenuOption[];
+  roleMenu:  GuildRoleMenuOption[];
+  rbResults: RatioBattleResult[];
 }
 
 const relatedNodes =  {
-  roleMenu: true
+  roleMenu: true,
+  rbResults: true
 }
 
 export default async (target: DiscordGuild): Promise<GuildExtras> => {
@@ -23,6 +25,5 @@ export default async (target: DiscordGuild): Promise<GuildExtras> => {
       })
     }
     res(guild)
-    
   })
 }

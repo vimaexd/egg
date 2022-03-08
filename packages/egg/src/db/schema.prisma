@@ -20,12 +20,27 @@ model GuildRoleMenuOption {
   role      String
 }
 
+model RatioBattleResult {
+  id        Int             @id @default(autoincrement())
+  guild     Guild           @relation(fields: [guildId], references: [id])
+  guildId   String
+  
+  messageId String
+
+  winnerId  String
+  loserId   String
+
+  insults   Int
+  timestamp DateTime
+}
+
 model Guild {
   id        String          @id
   roleMenu  GuildRoleMenuOption[]
 
   // RATIO BATTLES
   rbEnabled Boolean         @default(false)
+  rbResults RatioBattleResult[]
 
   // REACTION WORDS
   rwEnabled Boolean         @default(false)

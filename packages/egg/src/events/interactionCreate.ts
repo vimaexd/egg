@@ -17,6 +17,7 @@ export default (_interaction: Discord.Interaction, client: Discord.Client, globa
         if(!cmd) return;
         if(!cmd.meta.enabled) return;
         cmd.run(client, interaction, globals)
+
         globals.log.log(`${interaction.user.username}#${interaction.user.discriminator} ran command /${cmd.meta.name}`)
         break;
         

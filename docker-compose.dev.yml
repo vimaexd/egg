@@ -4,3 +4,4 @@ services:
       - NODE_ENV=development
     volumes:
       - ./packages/egg/src/db/migrations:/app/packages/egg/src/db/migrations
+      - ./packages/egg/node_modules/.prisma:/app/packages/egg/node_modules/.prisma

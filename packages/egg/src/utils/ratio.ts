@@ -2,6 +2,7 @@ import Discord, { Guild, Message, ReactionEmoji, TextChannel, User } from "disco
 import dayjs from "dayjs";
 import { YarnGlobals } from "./types";
 import getGuild from "../db/utils/getGuild";
+import Log from "../classes/Log";
 
 const RATIO_INSULTS = [
   "Probably subscribed to Dalux",
@@ -38,12 +39,30 @@ const RATIO_INSULTS = [
   "Can't join VIP vc",
   "Omelette eater",
   "ok and?",
-  "touch grass"
+  "touch grass",
+  "dosen't follow Dalux News",
+  "cancelled on Dalux News",
+  "cancelled on Twitter dot com",
+  "bonk",
+  "Blocked",
+  "Banned",
+  "Reported",
+  "Uncollabed",
+  "Unfollowed"
 ]
 
+const ratioLog = new Log({prefix: "RatioBattles"})
 const ratioEmoji = "👍"
-const ratioCooldown = 60 * 60 * 1000;
+const ratioCooldown = 30 * 60 * 1000; // 30m
 let lastRatioTimestamp: Map<Guild, number> = new Map<Guild, number>();
+
+const prompt_words = [
+  "ratio",
+  "cope",
+  "counter ratio",
+  "counter-ratio",
+  "counter"
+]
 
 /**
  * Detect ratios
@@ -53,13 +72,14 @@ export default async (message: Discord.Message, client: Discord.Client, globals:
   if (message.author.bot) return;
   if ((message.channel as TextChannel).name !== "chat") return;
 
-  if (!message.content.startsWith("ratio")) return;
+  if (!prompt_words.some(w => message.content.startsWith(w))) return;
   if (!message.reference) return;
 
   const counter = await message.fetchReference();
   if (message.createdTimestamp - counter.createdTimestamp > 5 * 60000) return;
   if (counter.author.bot) return;
-  if (!counter.content.startsWith("ratio")) return;
+  if (counter.author.id == message.author.id) return;
+  if (!prompt_words.some(w => counter.content.startsWith(w))) return;
 
 
   if (
@@ -74,7 +94,7 @@ export default async (message: Discord.Message, client: Discord.Client, globals:
   counter.react(ratioEmoji);
 
   lastRatioTimestamp.set(message.guild, dayjs().valueOf());
-  const promptMessage = await message.channel.send(`ratio?`);
+  const promptMessage = await message.channel.send(`**Ratio battle started!** Declare the winner by reacting with :+1:`);
 
   const declareWinner = async () => {
     try {
@@ -85,7 +105,10 @@ export default async (message: Discord.Message, client: Discord.Client, globals:
     
     const originalRatios = message.reactions.resolve(ratioEmoji).count;
     const counterRatios = counter.reactions.resolve(ratioEmoji).count;
-    const loser = (originalRatios > counterRatios) ? counter : message;
+
+    let loser = (originalRatios > counterRatios) ? counter : message;
+    let winner = (originalRatios > counterRatios) ? message : counter;
+    if(loser.id == "577743466940071949") loser = winner;
 
     const theFunnyNumber = Math.round(Math.random() * 7) + 1;
 
@@ -99,9 +122,24 @@ export default async (message: Discord.Message, client: Discord.Client, globals:
     }
 
     loser.reply({content: `ratio${insults}`})
+    globals.db.guild.update({
+      where: { id: guild.id },
+      data: {
+        rbResults: {
+          create: {
+            messageId: winner.id.toString(),
+            winnerId: winner.author.id.toString(),
+            loserId: loser.author.id.toString(),
+            insults: theFunnyNumber,
+            timestamp: new Date()
+          }
+        }
+      }
+    })
+    ratioLog.log(`Ratio won by ${winner.author.username}#${winner.author.discriminator} (${winner.author.id}) and lost by ${loser.author.username}#${loser.author.discriminator} (${loser.author.id}) (message ${winner.id})`)
   }
 
-  setTimeout(declareWinner, 20 * 1000)
+  setTimeout(declareWinner, 10 * 1000)
 }
 
 export {

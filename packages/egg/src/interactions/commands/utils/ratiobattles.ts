@@ -1,6 +1,6 @@
 import axios from "axios";
 import Discord, { ButtonInteraction, Constants, GuildMember, MessageEmbed } from "discord.js"
-import Command from "../../../classes/Commands/Command"
+import Command, { PermissionGroup } from "../../../classes/Commands/Command"
 import dayjs from "dayjs";
 import getGuild from "../../../db/utils/getGuild";
 import { deleteBtn, noBtn } from "../../../utils/buttons";
@@ -10,6 +10,7 @@ const Cmd = new Command({
     enabled: true,
     name: "ratiobattles",
     description: "Configure Ratio battles",
+    restrict: PermissionGroup.ALL_STAFF,
     options: [
     {
       name: "toggle",
@@ -35,9 +36,6 @@ const Cmd = new Command({
     }
     ]
 }, async (client, interaction, globals) => {
-  if(!(interaction.member as Discord.GuildMember).permissions.has("MANAGE_GUILD"))
-    return interaction.reply({"content": ":x: You must have the **Manage Guild** permission to use this command!"})
-
   const guild = await getGuild(interaction.guild);
 
   switch(interaction.options.getSubcommand()){
@@ -60,7 +58,7 @@ const Cmd = new Command({
       ) {
         return interaction.reply(`✅ The ratio cooldown has expired! Waiting on a Ratio Battle message...`)
       } else {
-        const cooldownUnixSec = Math.floor(lastRatioTimestamp.get(interaction.guild) + ratioCooldown * 1000)
+        const cooldownUnixSec = Math.floor((lastRatioTimestamp.get(interaction.guild) + ratioCooldown) / 1000)
         interaction.reply(`🕒 The ratio cooldown expires <t:${cooldownUnixSec}:R> (<t:${cooldownUnixSec}>)`)
       }
       break;

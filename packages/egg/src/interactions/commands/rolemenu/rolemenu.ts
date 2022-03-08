@@ -1,6 +1,6 @@
 import axios from "axios";
 import Discord, { ButtonInteraction, GuildMember, MessageEmbed } from "discord.js"
-import Command from "../../../classes/Commands/Command"
+import Command, { PermissionGroup } from "../../../classes/Commands/Command"
 import dayjs from "dayjs";
 import getGuild from "../../../db/utils/getGuild";
 
@@ -11,6 +11,7 @@ const Cmd = new Command({
     enabled: true,
     name: "rolemenu",
     description: "Create a reaction menu to let users self-assign roles",
+    restrict: PermissionGroup.ADMIN,
     options: [
     {
       name: "post",
@@ -56,8 +57,6 @@ const Cmd = new Command({
       ]
     }]
 }, async (client, interaction, globals) => {
-  if(!(interaction.member as Discord.GuildMember).permissions.has("MANAGE_GUILD"))
-    return interaction.reply({"content": ":x: You must have the **Manage Guild** permission to use this command!"})
 
   const guild = await getGuild(interaction.guild);
 

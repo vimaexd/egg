@@ -4,10 +4,13 @@ COPY ./packages/egg /app/packages/egg
 COPY ./config /app/config
 WORKDIR /app/packages/egg
 
-# Install packages
+# install packages
 RUN npm i
 
-# Transpile TypeScript code
+# transpile TypeScript code
 RUN npm run build
+
+# prune dependancies
+RUN npm prune --production
 
 CMD ["npm", "run", "start"]
