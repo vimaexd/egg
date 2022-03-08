@@ -110,12 +110,14 @@ export default async (message: Discord.Message, client: Discord.Client, globals:
 
     let loser = (originalRatios > counterRatios) ? counter : message;
     let winner = (originalRatios > counterRatios) ? message : counter;
-    if(loser.author.id == "577743466940071949") {
-      let temp = winner;
-      winner = loser;
-      loser = temp;
-      rigged = true;
-    }
+
+    // rigging code
+    // if(loser.author.id == "577743466940071949") {
+    //   let temp = winner;
+    //   winner = loser;
+    //   loser = temp;
+    //   rigged = true;
+    // }
 
     const theFunnyNumber = Math.round(Math.random() * 7) + 1;
 
@@ -128,7 +130,6 @@ export default async (message: Discord.Message, client: Discord.Client, globals:
       V_RATIO_INSULTS.splice(V_RATIO_INSULTS.indexOf(insult), 1)
     }
 
-    if(rigged) message.channel.send(`Stringy loss detected, rigging battle`)
     loser.reply({content: `ratio${insults}`})
 
     if(rigged) return;
