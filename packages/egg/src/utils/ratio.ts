@@ -133,7 +133,7 @@ export default async (message: Discord.Message, client: Discord.Client, globals:
     loser.reply({content: `ratio${insults}`})
 
     if(rigged) return;
-    globals.db.guild.update({
+    await globals.db.guild.update({
       where: { id: guild.id },
       data: {
         rbResults: {
