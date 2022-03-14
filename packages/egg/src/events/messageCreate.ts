@@ -10,6 +10,7 @@ const FUNNY_WORDS: any = {
   "^(?=.*\\bskill\\b)(?=.*\\bissue\\b).*$": "💀",        // skill issue
   "get real": "<:skullrealistic:902391812403130408>",    // get real
   "[oøu]m+[eaæ]?l+[æea]t+e?": "🍳",                      // omelette
+  "rose": "<:dr88:940240705522106448>"                   // rose
 }
 
 export default async (message: Discord.Message, client: Discord.Client, globals: YarnGlobals) => {
