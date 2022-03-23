@@ -26,7 +26,7 @@ PermissionRoles[PermissionGroup.OWNER] = [
 PermissionRoles[PermissionGroup.BOT_OWNER] = [
   "675431621452759050"   // Yarn:tm: role
 ];
-PermissionRoles[PermissionGroup.ALL_STAFF] = [].concat(
+PermissionRoles[PermissionGroup.ALL_STAFF] = ([] as string[]).concat(
   PermissionRoles[PermissionGroup.MODERATOR],
   PermissionRoles[PermissionGroup.ADMIN],
   PermissionRoles[PermissionGroup.OWNER]
