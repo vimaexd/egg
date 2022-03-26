@@ -14,7 +14,7 @@ import useEggbotApi, { EggbotApi } from '../../../hooks/useEggbotApi';
 
 export default function Leaderboard() {
   const [data, setData] = useState([]);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [isFinalPage, setIsFinalPage] = useState(false);
 
   const [needsFetch, setNeedsFetch] = useState(false);
@@ -24,7 +24,7 @@ export default function Leaderboard() {
     const fetchPageAndAppend = async () => {
       setLoading(true);
       const res = await EggbotApi.get(`/flutegang/leaderboard/${page}`)
-      if((!(res.data.counts.length > 15))){
+      if(res.data.counts.length < 15){
         setIsFinalPage(true);
       }
       setData([...res.data.counts, ...data])
@@ -52,6 +52,7 @@ export default function Leaderboard() {
         window.innerHeight + e.target.documentElement.scrollTop + 1 >=
         e.target.documentElement.scrollHeight
       ) {
+        if(isFinalPage) return;
         if(!needsFetch && !loading) setNeedsFetch(true)
       }
     });
