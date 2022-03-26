@@ -17,24 +17,21 @@ export default function Leaderboard() {
   const [page, setPage] = useState(0);
   const [isFinalPage, setIsFinalPage] = useState(false);
 
-  const [needsFetch, setNeedsFetch] = useState(false);
+  const [needsFetch, setNeedsFetch] = useState(true);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchPageAndAppend = async () => {
+      if(isFinalPage) return;
       setLoading(true);
       const res = await EggbotApi.get(`/flutegang/leaderboard/${page}`)
       if(res.data.counts.length < 15){
+        console.log("we've reached the end")
         setIsFinalPage(true);
       }
-      setData([...res.data.counts, ...data])
+      setData([...data, ...res.data.counts])
   
-      // dummy data
       setLoading(false);
-    }
-  
-    if(data.length == 0) {
-      fetchPageAndAppend();
     }
 
     if(needsFetch && !loading){
@@ -42,17 +39,14 @@ export default function Leaderboard() {
       setPage(page + 1);
       fetchPageAndAppend();
     }
-  }, [data, loading, needsFetch, page])
+  }, [data, isFinalPage, loading, needsFetch, page])
 
   if(typeof window !== 'undefined'){
     window.addEventListener('scroll', async (e: any) => {
-      if(isFinalPage) return;
-      console.log(e.target.documentElement.scrollTop, window.innerHeight, e.target.documentElement.scrollHeight)
       if(
         window.innerHeight + e.target.documentElement.scrollTop + 1 >=
         e.target.documentElement.scrollHeight
       ) {
-        if(isFinalPage) return;
         if(!needsFetch && !loading) setNeedsFetch(true)
       }
     });
@@ -63,18 +57,16 @@ export default function Leaderboard() {
     <Dashboard centerHorizontal={true}>
         <DashboardTitle>Leaderboard</DashboardTitle>
         <div className='w-3/6'>
-          <div>
+          <Anime translateX={["-40px", "0px"]} opacity={[0, 1]} easing="easeOutExpo">
             {
               data.map((e, i) => (
-                <Anime translateX={["-40px", "0px"]} opacity={[0, 1]} easing="easeOutExpo" key={i}>
-                  <LeaderboardEntry entry={e} index={i}/>
-                </Anime>
+                  <LeaderboardEntry entry={e} index={i} key={i}/>
               ))
             }
             {
               (loading) && <LoadingSpinner fill="#fff" className='w-8 h-8'/>
             }
-          </div>
+          </Anime>
         </div>
     </Dashboard>
   )
