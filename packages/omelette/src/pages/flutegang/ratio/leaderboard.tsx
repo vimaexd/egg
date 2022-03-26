@@ -14,7 +14,7 @@ import useEggbotApi, { EggbotApi } from '../../../hooks/useEggbotApi';
 
 export default function Leaderboard() {
   const [data, setData] = useState([]);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const [isFinalPage, setIsFinalPage] = useState(false);
 
   const [needsFetch, setNeedsFetch] = useState(false);
