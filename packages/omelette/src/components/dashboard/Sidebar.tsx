@@ -28,7 +28,7 @@ export default function Sidebar() {
         </SidebarGroup> */}
       </div>
       <div className='p-4'>
-        <p>made with 💜 by mae</p>
+        <p>made with 💜 by Mae</p>
       </div>
     </div>
   )
