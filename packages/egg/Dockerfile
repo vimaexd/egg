@@ -13,4 +13,5 @@ RUN npm run build
 # prune dependancies
 RUN npm prune --production
 
+EXPOSE 9090
 CMD ["npm", "run", "start"]

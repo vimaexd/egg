@@ -54,7 +54,7 @@ const RATIO_INSULTS = [
 const ratioLog = new Log({prefix: "RatioBattles"})
 const ratioEmoji = "👍"
 const ratioCooldown = 30 * 60 * 1000; // 30m
-let lastRatioTimestamp: Map<Guild, number> = new Map<Guild, number>();
+let lastRatioTimestamp: Map<string, number> = new Map<string, number>();
 
 const prompt_words = [
   "ratio",
@@ -83,8 +83,8 @@ export default async (message: Discord.Message, client: Discord.Client, globals:
 
 
   if (
-    lastRatioTimestamp.has(message.guild) &&
-    message.createdTimestamp - lastRatioTimestamp.get(message.guild) < ratioCooldown
+    lastRatioTimestamp.has(message.guild.id) &&
+    message.createdTimestamp - lastRatioTimestamp.get(message.guild.id) < ratioCooldown
   ) return;
 
   const guild = await getGuild(message.guild);
@@ -93,7 +93,7 @@ export default async (message: Discord.Message, client: Discord.Client, globals:
   message.react(ratioEmoji);
   counter.react(ratioEmoji);
 
-  lastRatioTimestamp.set(message.guild, dayjs().valueOf());
+  lastRatioTimestamp.set(message.guild.id, dayjs().valueOf());
   const promptMessage = await message.channel.send(`**Ratio battle started!** Declare the winner by reacting with :+1:`);
 
   const declareWinner = async () => {

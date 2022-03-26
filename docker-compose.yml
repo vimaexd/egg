@@ -8,6 +8,8 @@ services:
     restart: always
     env_file:
     - .env
+    ports:
+      - 9090:${API_PORT}
 
   db:
     image: postgres
