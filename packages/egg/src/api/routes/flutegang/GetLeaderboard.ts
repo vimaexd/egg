@@ -17,14 +17,15 @@ const GetLeaderboardSchema: FastifySchema = {
   }
 }
 
-const GetLeaderboardHandler = async (req: FastifyRequest, reply: FastifyReply) => {
-  const page = req.params;
+const GetLeaderboardHandler = async (req: any, reply: FastifyReply) => {
+  const page = req.params["page"];
 
   const amountRecords = 15
-  const offset = +page * amountRecords
+  const offset = parseInt(page) * amountRecords
 
   const records = await globals.db.ratioBattleResult.groupBy({
     take: 15,
+    skip: offset,
     by: ['winnerId'],
     where: {
       guildId: getFluteGangId()
