@@ -16,7 +16,7 @@ export default function Index() {
 
   useEffect(() => {
     if(!loading){
-      if(data.expires < Date.now()) setExpired(true);
+      if(data.expires > Date.now()) setExpired(true);
     }
   }, [data, loading])
 
