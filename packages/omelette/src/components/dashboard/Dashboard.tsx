@@ -24,14 +24,14 @@ export default function Dashboard(props: DashboardProps) {
     additionalContentClasses += ' ' + props.className
 
   return (
-    <div className='bg-black text-white min-h-screen flex flex-col md:flex-row'>
+    <div className='bg-black text-white min-h-screen h-full flex flex-col md:flex-row'>
       <div className='hidden md:flex'>
         <DesktopSidebar/>
       </div>
       <div className='flex md:hidden'>
         <MobileSidebar/>
       </div>
-      <div className={'w-full h-full md:h-screen flex-grow' + additionalContentClasses}>
+      <div className={'w-full h-full flex-grow' + additionalContentClasses}>
         {props.children}
       </div>
     </div>

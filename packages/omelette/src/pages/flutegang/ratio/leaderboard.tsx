@@ -5,12 +5,13 @@ import React, { useEffect, useRef, useState } from 'react'
 import anime from 'animejs'
 const Anime = dynamic(() => import('react-anime'), {ssr: false})
 
-import Dashboard from '../../../components/dashboard/Dashboard'
-import DashboardTitle from '../../../components/dashboard/DashboardTitle';
-import LeaderboardEntry from '../../../components/leaderboard/LeaderboardEntry';
-import LoadingSpinner from '../../../components/LoadingSpinner';
-import useEggbotApi, { EggbotApi } from '../../../hooks/useEggbotApi';
-import DashboardColumn from '../../../components/dashboard/DashboardColumn';
+import Dashboard from '@components/dashboard/Dashboard'
+import DashboardTitle from '@components/dashboard/DashboardTitle';
+import LeaderboardEntry from '@components/leaderboard/LeaderboardEntry';
+import LoadingSpinner from '@components/LoadingSpinner';
+import useEggbotApi, { EggbotApi } from '@hooks/useEggbotApi';
+import DashboardColumn from '@components/dashboard/DashboardColumn';
+import EggbotHead from '@components/EggbotHead';
 
 
 export default function Leaderboard() {
@@ -56,6 +57,10 @@ export default function Leaderboard() {
 
   return (
     <Dashboard centerHorizontal={true}>
+        <EggbotHead 
+        title="Ratio Battle Leaderboard" 
+        description="Wanna show off on how much of a Twitter user you are? Find your rank on the Ratio Battle Leaderboard"
+        />
         <DashboardTitle>Leaderboard</DashboardTitle>
         <DashboardColumn>
           <Anime translateX={["-40px", "0px"]} opacity={[0, 1]} easing="easeOutExpo">

@@ -2,11 +2,12 @@ import { formatDistanceToNowStrict } from 'date-fns';
 import Image from 'next/image'
 import React, { Fragment, useEffect, useState } from 'react'
 
-import Dashboard from '../../../components/dashboard/Dashboard'
-import DashboardColumn from '../../../components/dashboard/DashboardColumn';
-import DashboardTitle from '../../../components/dashboard/DashboardTitle';
-import LoadingSpinner from '../../../components/LoadingSpinner';
-import useEggbotApi from '../../../hooks/useEggbotApi';
+import Dashboard from '@components/dashboard/Dashboard'
+import DashboardColumn from '@components/dashboard/DashboardColumn';
+import DashboardTitle from '@components/dashboard/DashboardTitle';
+import LoadingSpinner from '@components/LoadingSpinner';
+import useEggbotApi from '@hooks/useEggbotApi';
+import EggbotHead from '@components/EggbotHead';
 
 
 export default function Index() {
@@ -23,6 +24,10 @@ export default function Index() {
 
   return (
     <Dashboard centerHorizontal={true}>
+        <EggbotHead 
+        title="Ratio Battle Cooldown" 
+        description="Waiting mindlessly until you can type 'cope lmao' in response to someone else? Refresh this site to see when!"
+        />
         <DashboardTitle>Cooldown</DashboardTitle>
         <DashboardColumn>
           <div className='p-4 bg-str-bleck-200 rounded-md border-l-8 border-l-exyl-red'>

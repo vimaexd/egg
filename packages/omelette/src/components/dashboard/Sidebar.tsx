@@ -14,9 +14,9 @@ function SidebarLinks() {
         <SidebarOption icon="bx bx-sm bx-timer" href="/flutegang/ratio/cooldown" text="Cooldown"></SidebarOption>
         <SidebarOption icon="bx bx-sm bx-medal" href="/flutegang/ratio/leaderboard" text="Leaderboard"></SidebarOption>
       </SidebarGroup>
-      {/* <SidebarGroup name="Reaction Words">
-        <SidebarOption icon="bx bx-sm bx-text" href="/flutegang/react/words" text="Words"></SidebarOption>
-      </SidebarGroup> */}
+      <SidebarGroup name="Reaction Words">
+        <SidebarOption icon="bx bx-sm bx-text" href="/flutegang/reactions" text="Words"></SidebarOption>
+      </SidebarGroup>
     </Fragment>
   )
 }
