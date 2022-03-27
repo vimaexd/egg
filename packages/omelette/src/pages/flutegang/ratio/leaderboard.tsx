@@ -10,6 +10,7 @@ import DashboardTitle from '../../../components/dashboard/DashboardTitle';
 import LeaderboardEntry from '../../../components/leaderboard/LeaderboardEntry';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import useEggbotApi, { EggbotApi } from '../../../hooks/useEggbotApi';
+import DashboardColumn from '../../../components/dashboard/DashboardColumn';
 
 
 export default function Leaderboard() {
@@ -56,7 +57,7 @@ export default function Leaderboard() {
   return (
     <Dashboard centerHorizontal={true}>
         <DashboardTitle>Leaderboard</DashboardTitle>
-        <div className='w-3/6'>
+        <DashboardColumn>
           <Anime translateX={["-40px", "0px"]} opacity={[0, 1]} easing="easeOutExpo">
             {
               data.map((e, i) => (
@@ -67,7 +68,7 @@ export default function Leaderboard() {
               (loading) && <LoadingSpinner fill="#fff" className='w-8 h-8'/>
             }
           </Anime>
-        </div>
+        </DashboardColumn>
     </Dashboard>
   )
 }

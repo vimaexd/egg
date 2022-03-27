@@ -20,7 +20,7 @@ export default function SidebarOption(props: SidebarOptionProps) {
   
   return (
     <div 
-    className='bg-stone-800 hover:bg-exyl-orange w-full p-4 hover:translate-x-4 hover:cursor-pointer hover:rounded-lg transition-all my-1' 
+    className='bg-stone-800 hover:bg-exyl-orange w-full p-4 md:hover:translate-x-4 hover:cursor-pointer hover:rounded-lg transition-all my-1' 
     onClick={interceptOnClick}
     >
       <div className='flex space-x-4 items-center'>

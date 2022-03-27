@@ -3,9 +3,6 @@ const nextConfig = {
   reactStrictMode: true,
   images: {
     domains: ['cdn.discordapp.com']
-  },
-  experimental: {
-    outputStandalone: true
   }
 }
 

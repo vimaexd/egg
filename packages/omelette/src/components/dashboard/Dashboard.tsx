@@ -1,5 +1,5 @@
 import React from 'react'
-import Sidebar from './Sidebar'
+import { DesktopSidebar, MobileSidebar } from './Sidebar'
 
 interface DashboardProps {
   centerVertical?: boolean;
@@ -24,9 +24,14 @@ export default function Dashboard(props: DashboardProps) {
     additionalContentClasses += ' ' + props.className
 
   return (
-    <div className='bg-black text-white min-h-screen flex'>
-      <Sidebar/>
-      <div className={'w-full' + additionalContentClasses}>
+    <div className='bg-black text-white min-h-screen flex flex-col md:flex-row'>
+      <div className='hidden md:flex'>
+        <DesktopSidebar/>
+      </div>
+      <div className='flex md:hidden'>
+        <MobileSidebar/>
+      </div>
+      <div className={'w-full h-full md:h-screen flex-grow' + additionalContentClasses}>
         {props.children}
       </div>
     </div>

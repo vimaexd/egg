@@ -3,6 +3,7 @@ import Image from 'next/image'
 import React, { Fragment, useEffect, useState } from 'react'
 
 import Dashboard from '../../../components/dashboard/Dashboard'
+import DashboardColumn from '../../../components/dashboard/DashboardColumn';
 import DashboardTitle from '../../../components/dashboard/DashboardTitle';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import useEggbotApi from '../../../hooks/useEggbotApi';
@@ -16,14 +17,14 @@ export default function Index() {
 
   useEffect(() => {
     if(!loading){
-      if(data.expires > Date.now()) setExpired(true);
+      if(data.expires < Date.now()) setExpired(true);
     }
   }, [data, loading])
 
   return (
     <Dashboard centerHorizontal={true}>
         <DashboardTitle>Cooldown</DashboardTitle>
-        <div className='w-3/6'>
+        <DashboardColumn>
           <div className='p-4 bg-str-bleck-200 rounded-md border-l-8 border-l-exyl-red'>
             <div className='flex items-center'>
               {
@@ -76,7 +77,7 @@ export default function Index() {
                 Moderators have the ability to skip the cooldown, however please do not constantly ask them to do so.
               </p>
           </div>
-        </div>
+          </DashboardColumn>
     </Dashboard>
   )
 }
