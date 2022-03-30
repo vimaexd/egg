@@ -3,53 +3,7 @@ import dayjs from "dayjs";
 import { YarnGlobals } from "./types";
 import getGuild from "../db/utils/getGuild";
 import Log from "../classes/Log";
-
-const RATIO_INSULTS = [
-  "Probably subscribed to Dalux",
-  "Bozo", 
-  "You fell off", 
-  "You're\*", 
-  "Genshinner",
-  "Take a shower",
-  "💀",
-  "Das why yo momma ded",
-  "Ratio^2",
-  "L",
-  "Seethe",
-  "Mald",
-  "Cope",
-  "2 Followers",
-  "Source?",
-  "Go Outside",
-  "Any Askers?",
-  "Beaned",
-  "Admin-chan isn't real",
-  "Not funny, didn't laugh",
-  "Banned",
-  "Skill Issue",
-  "Marwan's Idea",
-  "eateing chips chrongch cronc mm",
-  "Dalux Blob",
-  "Yamm did it better",
-  "Ratio failure",
-  "DND on",
-  "Take a bath",
-  "Probably doesn't listen to Creo",
-  "Anime pfp",
-  "Can't join VIP vc",
-  "Omelette eater",
-  "ok and?",
-  "touch grass",
-  "dosen't follow Dalux News",
-  "cancelled on Dalux News",
-  "cancelled on Twitter dot com",
-  "bonk",
-  "Blocked",
-  "Banned",
-  "Reported",
-  "Uncollabed",
-  "Unfollowed"
-]
+import ratioInsults from './ratioInsults';
 
 const ratioLog = new Log({prefix: "RatioBattles"})
 const ratioEmoji = "👍"
@@ -121,13 +75,13 @@ export default async (message: Discord.Message, client: Discord.Client, globals:
 
     const theFunnyNumber = Math.round(Math.random() * 7) + 1;
 
-    let V_RATIO_INSULTS = RATIO_INSULTS.slice(); // clone array 
+    let insultArr = ratioInsults.slice(); // clone array 
     let insults = '';
     
     for(let i = 0; i < theFunnyNumber; i++){
-      let insult = V_RATIO_INSULTS[Math.floor(Math.random()*V_RATIO_INSULTS.length)];
+      let insult = insultArr[Math.floor(Math.random()*insultArr.length)];
       insults += ` + ${insult}`
-      V_RATIO_INSULTS.splice(V_RATIO_INSULTS.indexOf(insult), 1)
+      insultArr.splice(insultArr.indexOf(insult), 1)
     }
 
     loser.reply({content: `ratio${insults}`})

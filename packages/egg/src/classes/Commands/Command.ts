@@ -1,36 +1,8 @@
 import Discord, { AutocompleteInteraction, CommandInteraction, GuildMember, Interaction, User } from "discord.js"
 import { YarnGlobals } from "../../utils/types"
 
-export enum PermissionGroup {
-  NONE = "none",
-  ALL_STAFF = "staff",
-  MODERATOR = "mods",
-  ADMIN = "admin",
-  OWNER = "owner",
-  BOT_OWNER = "mae"
-}
-
-type TPermissionRoles = {[key: string]: string[]};
-let PermissionRoles: TPermissionRoles = {};
-
-PermissionRoles[PermissionGroup.MODERATOR] = [
-  "661408853589753866"   // Moderator role
-];
-PermissionRoles[PermissionGroup.ADMIN] = [
-  "660914705170169857"   // Admin role
-];
-PermissionRoles[PermissionGroup.OWNER] = [
-  "660914458365001756",  // Exyl role
-  "696895749350490194"   // Dalux role
-];
-PermissionRoles[PermissionGroup.BOT_OWNER] = [
-  "675431621452759050"   // Yarn:tm: role
-];
-PermissionRoles[PermissionGroup.ALL_STAFF] = ([] as string[]).concat(
-  PermissionRoles[PermissionGroup.MODERATOR],
-  PermissionRoles[PermissionGroup.ADMIN],
-  PermissionRoles[PermissionGroup.OWNER]
-)
+import { getPermissionRoles, PermissionGroup } from "../../utils/fgstatic";
+const PermissionRoles = getPermissionRoles();
 
 export interface CommandMeta {
     name: string,
@@ -67,16 +39,24 @@ export default class Command {
             throw err;
           }
 
+          console.log(`Testing permission roles for ${member.user.username} ${member.user.discriminator}`)
+          console.log(`Target group: ${group}`)
+          console.log(`Target group roles: ${PermissionRoles[group].join(", ")}`)
+
           // 😈
           if(member.roles.cache.has(PermissionRoles[PermissionGroup.BOT_OWNER][0])){
+            console.log(`Is Mae`)
             return true;
           };
 
-          PermissionRoles[group].forEach((roleId) => {
-            if(member.roles.cache.has(roleId)) return true;
+          return PermissionRoles[group].some((target) => {
+            console.log(`Testing role ${target}`)
+            if(member.roles.cache.some((r) => r.id == target)) {
+              console.log(`Found role match on role ${target}`)
+              return true;
+            }
           });
 
-          return false;
         }
 
         this.run = async (client, interaction, globals) => {
