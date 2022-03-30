@@ -2,14 +2,14 @@ import Discord from 'discord.js';
 
 const deleteBtn = new Discord.MessageButton()
 .setStyle("DANGER")
-.setLabel("I understand, delete")
-.setEmoji("🗑️")
+.setLabel("Yes")
+.setEmoji("✅")
 .setCustomId("yes")
 
 const noBtn = new Discord.MessageButton()
 .setStyle("SECONDARY")
 .setLabel("No!")
-.setEmoji("❌")
+.setEmoji("❎")
 .setCustomId("no")
 
 export {

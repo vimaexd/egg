@@ -39,20 +39,13 @@ export default class Command {
             throw err;
           }
 
-          console.log(`Testing permission roles for ${member.user.username} ${member.user.discriminator}`)
-          console.log(`Target group: ${group}`)
-          console.log(`Target group roles: ${PermissionRoles[group].join(", ")}`)
-
           // 😈
           if(member.roles.cache.has(PermissionRoles[PermissionGroup.BOT_OWNER][0])){
-            console.log(`Is Mae`)
             return true;
           };
 
           return PermissionRoles[group].some((target) => {
-            console.log(`Testing role ${target}`)
             if(member.roles.cache.some((r) => r.id == target)) {
-              console.log(`Found role match on role ${target}`)
               return true;
             }
           });
