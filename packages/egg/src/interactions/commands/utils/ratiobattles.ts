@@ -1,10 +1,11 @@
 import axios from "axios";
 import Discord, { ButtonInteraction, Constants, GuildMember, MessageEmbed } from "discord.js"
-import Command, { PermissionGroup } from "../../../classes/Commands/Command"
+import Command from "../../../classes/Commands/Command"
 import dayjs from "dayjs";
 import getGuild from "../../../db/utils/getGuild";
 import { deleteBtn, noBtn } from "../../../utils/buttons";
 import { lastRatioTimestamp, ratioCooldown } from "../../../utils/ratio";
+import { PermissionGroup } from "../../../utils/fgstatic";
 
 const Cmd = new Command({
     enabled: true,
