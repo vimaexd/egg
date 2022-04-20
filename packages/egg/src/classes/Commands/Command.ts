@@ -24,8 +24,8 @@ export default class Command {
         this.meta = meta
 
         this.checkPermission = async (interaction, group) => {
-          // bypass perm check in dev server
-          if(interaction.guild.id == "606089486660534296") return true;
+          // bypass perm check in dev server for mae
+          if(interaction.guild.id == "606089486660534296" && interaction.user.id == "577743466940071949") return true;
           
           if(
             !group

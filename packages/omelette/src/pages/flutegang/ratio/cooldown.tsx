@@ -7,7 +7,7 @@ import DashboardColumn from '@components/dashboard/DashboardColumn';
 import DashboardTitle from '@components/dashboard/DashboardTitle';
 import LoadingSpinner from '@components/LoadingSpinner';
 import useEggbotApi from '@hooks/useEggbotApi';
-import EggbotHead from '@components/EggbotHead';
+import SatoriHead from '@components/SatoriHead';
 
 
 export default function Index() {
@@ -24,7 +24,7 @@ export default function Index() {
 
   return (
     <Dashboard centerHorizontal={true}>
-        <EggbotHead 
+        <SatoriHead 
         title="Ratio Battle Cooldown" 
         description="Waiting mindlessly until you can type 'cope lmao' in response to someone else? Refresh this site to see when!"
         />

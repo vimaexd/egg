@@ -8,7 +8,7 @@ import DashboardColumn from '@components/dashboard/DashboardColumn';
 import DashboardTitle from '@components/dashboard/DashboardTitle';
 import LoadingSpinner from '@components/LoadingSpinner';
 import useEggbotApi from '@hooks/useEggbotApi';
-import EggbotHead from '@components/EggbotHead';
+import SatoriHead from '@components/SatoriHead';
 
 
 export default function Index() {
@@ -19,7 +19,7 @@ export default function Index() {
 
   return (
     <Dashboard centerHorizontal={true}>
-        <EggbotHead 
+        <SatoriHead 
         title="Reaction Words" 
         description="Type something funny? There's a Reaction Word for that"
         />
@@ -38,7 +38,7 @@ export default function Index() {
                 It&apos;s probably due to one of the following:
                 <ul className='list-disc list-inside'>
                   <li>A moderator temporarily disabling the feature</li>
-                  <li>Eggbot going down/undergoing maintainence</li>
+                  <li>Satori going down/undergoing maintainence</li>
                   <li>
                     <a href="https://discordstatus.com">
                       <span className='text-blue-200'>Discord having an API outage</span>

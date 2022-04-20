@@ -4,6 +4,7 @@ import { YarnGlobals } from "../utils/types";
 import detectRatio from '../utils/ratio';
 import getGuild from "../db/utils/getGuild";
 import reactionWords from "../utils/reactwords";
+import xp from "../classes/Xp";
 
 export default async (message: Discord.Message, client: Discord.Client, globals: YarnGlobals) => {
   if(message.partial) return;
@@ -23,4 +24,5 @@ export default async (message: Discord.Message, client: Discord.Client, globals:
     })
 
   detectRatio(message, client, globals);
+  xp.runXp(message);
 }

@@ -35,13 +35,56 @@ model RatioBattleResult {
 }
 
 model Guild {
-  id        String          @id
-  roleMenu  GuildRoleMenuOption[]
+  id              String                @id
+  members         GuildMember[]
+
+  // ROLE MENU
+  roleMenu        GuildRoleMenuOption[]
 
   // RATIO BATTLES
-  rbEnabled Boolean         @default(false)
-  rbResults RatioBattleResult[]
+  rbEnabled       Boolean               @default(false)
+  rbResults       RatioBattleResult[]
 
   // REACTION WORDS
-  rwEnabled Boolean         @default(false)
+  rwEnabled       Boolean               @default(false)
+
+  // XP
+  xpEnabled       Boolean               @default(false)
+  xpMinChar       Int                   @default(10)
+  xpMaxMsgPerMin  Int                   @default(5)
+  xpRoleRewards   GuildXPRoleReward[]
+
+  // XP: Boost (per messages)
+  xpBoostEnabled  Boolean               @default(true)
+  xpBoostMsgAmnt  BigInt                @default(100)
+  xpBoostMin      Int                   @default(50)
+  xpBoostMax      Int                   @default(100)
+
+  // XP: Ratio Battles
+  xpRbEnabled     Boolean               @default(true)
+  xpRbAmount      Int                   @default(50)
+}
+
+
+model GuildMember {
+  id          String          @id @default(uuid())
+  userId      String          
+
+  guild       Guild           @relation(fields: [guildId], references: [id])
+  guildId     String
+
+  xp          BigInt          @default(0)
+  xpMessages  BigInt          @default(0)
+  xpBanned    Boolean         @default(false)
+
+  rbEnabled   Boolean         @default(true)
+}
+
+model GuildXPRoleReward {
+  id        String          @id  
+  guild     Guild           @relation(fields: [guildId], references: [id])
+  guildId   String
+
+  roleId    String
+  level     Int
 }

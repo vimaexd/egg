@@ -2,17 +2,17 @@ import Image from 'next/image'
 import React from 'react'
 
 import Dashboard from '@components/dashboard/Dashboard'
-import EggbotWordmark from '@components/EggbotWordmark';
-import EggbotHead from '@components/EggbotHead';
+import SatoriWordmark from '@components/SatoriWordmark';
+import SatoriHead from '@components/SatoriHead';
 
 export default function Index() {
   return (
     <Dashboard centerVertical={true} centerHorizontal={true}>
-      <EggbotHead 
+      <SatoriHead 
       title="Flute Gang" 
-      description="The home for all Flute Gang related Eggbot function"
+      description="The home for all Flute Gang related Satori function"
       />
-      <EggbotWordmark size="text-7xl"/>
+      <SatoriWordmark size="text-7xl"/>
     </Dashboard>
   )
 }

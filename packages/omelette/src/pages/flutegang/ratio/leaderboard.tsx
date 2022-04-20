@@ -9,9 +9,9 @@ import Dashboard from '@components/dashboard/Dashboard'
 import DashboardTitle from '@components/dashboard/DashboardTitle';
 import LeaderboardEntry from '@components/leaderboard/LeaderboardEntry';
 import LoadingSpinner from '@components/LoadingSpinner';
-import useEggbotApi, { EggbotApi } from '@hooks/useEggbotApi';
+import useEggbotApi, { SatoriApi } from '@hooks/useEggbotApi';
 import DashboardColumn from '@components/dashboard/DashboardColumn';
-import EggbotHead from '@components/EggbotHead';
+import SatoriHead from '@components/SatoriHead';
 
 
 export default function Leaderboard() {
@@ -26,7 +26,7 @@ export default function Leaderboard() {
     const fetchPageAndAppend = async () => {
       if(isFinalPage) return;
       setLoading(true);
-      const res = await EggbotApi.get(`/flutegang/leaderboard/${page}`)
+      const res = await SatoriApi.get(`/flutegang/leaderboard/${page}`)
       if(res.data.counts.length < 15){
         console.log("we've reached the end")
         setIsFinalPage(true);
@@ -57,7 +57,7 @@ export default function Leaderboard() {
 
   return (
     <Dashboard centerHorizontal={true}>
-        <EggbotHead 
+        <SatoriHead 
         title="Ratio Battle Leaderboard" 
         description="Wanna show off on how much of a Twitter user you are? Find your rank on the Ratio Battle Leaderboard"
         />

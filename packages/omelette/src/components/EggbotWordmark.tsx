@@ -1,10 +1,10 @@
 import React from 'react'
 
-interface EggbotWordmarkProps {
+interface SatoriWordmarkProps {
   size: string;
 }
 
-export default function EggbotWordmark(props: EggbotWordmarkProps) {
+export default function SatoriWordmark(props: SatoriWordmarkProps) {
   return (
     <h1 
     className={
@@ -15,7 +15,7 @@ export default function EggbotWordmark(props: EggbotWordmarkProps) {
       filter: "drop-shadow(4px 4px #fff)"
     }}
     >
-    EGGBOT
+    Satori
     </h1>
   )
 }

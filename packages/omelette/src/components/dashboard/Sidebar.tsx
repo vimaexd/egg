@@ -30,7 +30,7 @@ export function DesktopSidebar() {
           </Link>
       </div>
       <div className="h-full w-full">
-        {/* <h1 className="font-black italic text-5xl p-4 text-center">EGGBOT</h1> */}
+        {/* <h1 className="font-black italic text-5xl p-4 text-center">Satori</h1> */}
         <SidebarLinks/>
       </div>
       <div className='p-4'>
