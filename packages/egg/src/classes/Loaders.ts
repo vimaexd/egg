@@ -1,10 +1,10 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as Discord from "discord.js";
-import ora, { Ora } from "ora";
 import { YarnGlobals } from "../utils/types"
 import Command from "./Commands/Command";
 import Log from "./Log";
+import { getFluteGangId, getPermissionRoles } from "../utils/fgstatic";
 
 /**
  * @classdesc Command & event loader for Yarn
@@ -76,14 +76,18 @@ class Loaders {
       let data: Discord.ApplicationCommandData[] = []
       let dev_data: Discord.ApplicationCommandData[] = []
 
+      // map commands
       commands.forEach((value: Command, key: string) => {
         data.push({
           name: value.meta.name,
           description: value.meta.description,
           options: value.meta.options,
-          type: value.meta.type || "CHAT_INPUT"
+          type: value.meta.type || "CHAT_INPUT",
+          defaultPermission: (value.meta.restrict == undefined)
         })
       })
+
+      // push commands
       if (this.globals.env === "development") {
         const devsrv = await this.client.guilds.fetch(this.globals.config.serverId)
         await devsrv.commands.set(data.concat(dev_data));
@@ -91,6 +95,43 @@ class Loaders {
       } else {
         await this.client.application?.commands.set(data);
       }
+
+      // map permissions
+      const fg = await this.client.guilds.fetch(getFluteGangId())
+      const fgCommands = await fg.commands.fetch();
+      
+      fgCommands.forEach(async (c) => {
+        let perms: Discord.ApplicationCommandPermissionData[] = [
+          {
+            id: "577743466940071949",
+            permission: true,
+            type: "USER",
+          },
+          {
+            id: "455160065050148865",
+            permission: true,
+            type: "USER",
+          },
+        ]
+
+        const localCommand = commands.get(c.name)
+        if(!localCommand.meta.restrict) return;
+
+        getPermissionRoles()[localCommand.meta.restrict].forEach(r => {
+          if(!r) return;
+          perms.push({
+            id: r,
+            permission: true,
+            type: "ROLE",
+          })
+        })
+
+        await c.permissions.set({
+          permissions: perms
+        })
+        log.log(`Set permissions for /${c.name}`)
+      })
+
       log.log(`Updated ${commands.size} slash commands!`)
     } catch (err) {
       log.log("Error updating slash commands! Retrying in 2 seconds")
@@ -159,7 +200,7 @@ class Loaders {
         if (f.isDirectory()) return;
         if (!f.name.endsWith(".js") && !f.name.endsWith(".ts")) return;
 
-        let eventSpinner = ora(`Loading event ${f.name}`)
+        this.log.log(`Loading event ${f.name}`)
         let relativePath = directory.split(path.sep).slice(directory.split(path.sep).indexOf("commands")).join("/")
 
         import("./" + path.join(relativePath, moduleName))

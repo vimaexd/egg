@@ -7,6 +7,7 @@ import reactionWords from "../utils/reactwords";
 import xp from "../classes/Xp";
 
 export default async (message: Discord.Message, client: Discord.Client, globals: YarnGlobals) => {
+  if(message.channel.type == "DM") return;
   if(message.partial) return;
   
   Object.keys(reactionWords)

@@ -4,7 +4,8 @@ import {
   GuildRoleMenuOption, 
   RatioBattleResult,
   GuildMember,
-  GuildXPRoleReward
+  GuildXPRoleReward,
+  GuildXPBlacklistedChannel
 } from "@prisma/client";
 import { Guild as DiscordGuild } from "discord.js";
 import { bot } from '../../index';
@@ -14,13 +15,15 @@ type GuildExtras = Guild & {
   rbResults: RatioBattleResult[];
   // members: GuildMember[];
   xpRoleRewards: GuildXPRoleReward[];
+  xpBListChan: GuildXPBlacklistedChannel[];
 }
 
 const relatedNodes =  {
   roleMenu: true,
   rbResults: true,
   // members: true,
-  xpRoleRewards: true
+  xpRoleRewards: true,
+  xpBListChan: true,
 }
 
 export default async (target: DiscordGuild): Promise<GuildExtras> => {

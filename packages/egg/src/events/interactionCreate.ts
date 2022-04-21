@@ -5,6 +5,8 @@ import { YarnGlobals } from "../utils/types";
 import BtnRolemenuHandler from '../interactions/buttons/rolemenu';
 
 export default (_interaction: Discord.Interaction, client: Discord.Client, globals: YarnGlobals) => {
+  if(_interaction.channel.type == "DM") return;
+
   try {
     let interaction;
 

@@ -9,7 +9,7 @@ import { noBtn, deleteBtn } from '../../../utils/buttons';
 import { generateButtons, generateMessage, generateRows} from './_generateButtons';
 
 const Cmd = new Command({
-    enabled: true,
+    enabled: false,
     name: "rolemenu",
     description: "Create a reaction menu to let users self-assign roles",
     restrict: PermissionGroup.ADMIN,

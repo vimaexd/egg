@@ -1,12 +1,13 @@
 import axios from "axios";
 import path from 'path';
-import Discord, { ButtonInteraction, Constants, GuildMember, MessageAttachment, MessageEmbed } from "discord.js"
+import Discord, { ButtonInteraction, Constants, GuildMember, MessageAttachment, MessageEmbed, Util } from "discord.js"
 import Command from "../../../classes/Commands/Command"
 import { createCanvas, registerFont, Image, Canvas, loadImage } from 'canvas';
 import getGuildMember from "../../../db/utils/getGuildMember";
 import Xp from '../../../classes/Xp';
 import Big from "big.js";
 import getGuild from "../../../db/utils/getGuild";
+import Utils from "../../../classes/Utils";
 
 registerFont(
   path.join(__dirname, "../../../../assets/fonts/Montserrat-Regular.ttf"), 
@@ -60,22 +61,11 @@ function roundRect(ctx: any, x: number, y: number, width: number, height: number
 }
 
 // https://stackoverflow.com/questions/9461621/format-a-number-as-2-5k-if-a-thousand-or-more-otherwise-900
-function nFormatter(num: number, digits: number) {
-  const lookup = [
-    { value: 1, symbol: "" },
-    { value: 1e3, symbol: "k" },
-    { value: 1e6, symbol: "M" },
-    { value: 1e9, symbol: "G" },
-    { value: 1e12, symbol: "T" },
-    { value: 1e15, symbol: "P" },
-    { value: 1e18, symbol: "E" }
-  ];
-  const rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
-  var item = lookup.slice().reverse().find(function(item) {
-    return num >= item.value;
-  });
-  return item ? (num / item.value).toFixed(digits).replace(rx, "$1") + item.symbol : "0";
-}
+const nFormatter = new Utils().nFormatter
+
+function truncateString(str: string, n: number){
+  return (str.length > n) ? str.substr(0, n-1) + '...' : str;
+};
 
 const roundPfp = (img: Image) => {
   const temp = createCanvas(64, 64);
@@ -117,11 +107,7 @@ const Cmd = new Command({
   const targetProfile = await getGuildMember(target);
   const level = Xp.calculateLevel(new Big(targetProfile.xp.toString()));
 
-  // globals.db.guildMember.findMany({
-  //   where: {
-  //     guildId: interaction.guild.id
-  //   }
-  // })
+  const leaderboardPos = await Xp.getRank(targetProfile.xp, interaction.guild.id)
 
   const rankCard = createCanvas(1000, 210);
   const ctx = rankCard.getContext('2d');
@@ -137,9 +123,9 @@ const Cmd = new Command({
   // username
   ctx.fillStyle = "#fff"
   ctx.font = '800 50px Montserrat'
-  const usernameMeasure = ctx.measureText(target.user.username);
+  const usernameMeasure = ctx.measureText(truncateString(target.user.username, 16));
   const usernameY = 32 + (64 / 2) + (32 / 2)
-  ctx.fillText(target.user.username, 32 + 64 + 16, usernameY)
+  ctx.fillText(truncateString(target.user.username, 16), 32 + 64 + 16, usernameY)
   
   // discrim
   ctx.fillStyle = "#CECECE"
@@ -148,12 +134,11 @@ const Cmd = new Command({
   ctx.fillText("#" + target.user.discriminator, 32 + 64 + 16 + usernameMeasure.width + 4, usernameY)
   
   // rank num
-  let dummyRank = "000"
   ctx.fillStyle = "#fff"
   ctx.font = '800 50px Montserrat'
-  const rankMeasure = ctx.measureText(dummyRank);
-  const rankWidth = rankCard.width - 32 - rankMeasure.width;
-  ctx.fillText(dummyRank, rankCard.width - 32 - rankMeasure.width, usernameY)
+  const rankMeasure = ctx.measureText(leaderboardPos.toString());
+  const rankWidth = rankCard.width - 32 - rankMeasure.width - 6;
+  ctx.fillText(leaderboardPos.toString(), rankCard.width - 32 - rankMeasure.width, usernameY)
   
   // rank #
   ctx.font = '400 50px Montserrat'
@@ -178,11 +163,10 @@ const Cmd = new Command({
   roundRect(ctx, 32, rankCard.height - 100, 935, 64, 40, true)
   
   // filled bar
-  let xpPercent = new Big(targetProfile.xp.toString())
+  let xpPercent = new Big(targetProfile.xp.toString()).minus(Xp.calculateMinXpRequired(new Big(level)))
   .div(
-    Xp.calculateMinXpRequired(
-      new Big(level).add(1)
-    )
+    Xp.calculateMinXpRequired(new Big(level).add(1))
+      .minus(Xp.calculateMinXpRequired(new Big(level)))
   )
   .toNumber()
 

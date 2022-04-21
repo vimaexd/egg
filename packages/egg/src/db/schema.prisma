@@ -50,9 +50,10 @@ model Guild {
 
   // XP
   xpEnabled       Boolean               @default(false)
-  xpMinChar       Int                   @default(10)
+  xpMinChar       Int                   @default(0)
   xpMaxMsgPerMin  Int                   @default(5)
   xpRoleRewards   GuildXPRoleReward[]
+  xpBListChan     GuildXPBlacklistedChannel[]
 
   // XP: Boost (per messages)
   xpBoostEnabled  Boolean               @default(true)
@@ -81,10 +82,18 @@ model GuildMember {
 }
 
 model GuildXPRoleReward {
-  id        String          @id  
+  id        String          @id @default(uuid())
   guild     Guild           @relation(fields: [guildId], references: [id])
   guildId   String
 
   roleId    String
   level     Int
+}
+
+model GuildXPBlacklistedChannel {
+  id        String          @id @default(uuid())
+  guild     Guild           @relation(fields: [guildId], references: [id])
+  guildId   String
+
+  channelId String
 }

@@ -4,6 +4,7 @@ import getGuildMember from '../db/utils/getGuildMember';
 import dayjs from 'dayjs';
 import { bot } from '../index'; 
 import Big from 'big.js';
+import { GuildXPBlacklistedChannel } from '@prisma/client';
 
 const undefinedKeyValueUtil = (obj: any, key: any) => {
   if(!obj) return undefined;
@@ -39,6 +40,17 @@ class XP {
     const prefKeys = Object.keys(guild).filter(k => k.startsWith("xp"));
     const prefs = prefKeys.reduce((obj: any, cur: string) => ({...obj, [cur]: guild[cur]}), {})
     this.guildPrefs[guild.id] = prefs;
+  }
+
+  async getRank(userXp: bigint, guildId: string) {
+    return await bot.globals.db.guildMember.count({
+      where: {
+        guildId: guildId,
+        xp: {
+          gt: userXp
+        }
+      }
+    }) + 1
   }
 
   calculateLevel(xp: Big) {
@@ -104,6 +116,18 @@ class XP {
     let member = await getGuildMember(message.member);
     if(member.xpBanned) return;
 
+    /*
+      CHECK 6
+      Blacklisted channel check
+    */
+    let isBlacklisted = false;
+    prefs.xpBListChan.forEach((c: GuildXPBlacklistedChannel) => {
+      if(c.channelId == message.channel.id) {
+        isBlacklisted = true;
+      };
+    })
+    if(isBlacklisted) return;
+
     // Assign new XP
     await bot.globals.db.guildMember.updateMany({
       where: {
@@ -128,9 +152,9 @@ class XP {
     this.msgCooldownStore[message.guild.id][message.member.id] += 1
     
     // See if a user is eligible for an XP boost
-    if((member.xpMessages + 1n) % BigInt(prefs.xpBoostMsgAmnt) == 0n){
+    if((member.xpMessages + 1n) % BigInt(prefs.xpBoostMsgAmnt) == 0n && prefs.xpBoostEnabled){
       const xpBoostAmount = Math.floor(Math.random() * prefs.xpBoostMax) + prefs.xpBoostMin;
-      bot.globals.db.guildMember.updateMany({
+      await bot.globals.db.guildMember.updateMany({
         where: {
           userId: message.member.id,
           guildId: message.guild.id

@@ -102,6 +102,20 @@ export default async (message: Discord.Message, client: Discord.Client, globals:
       }
     })
     ratioLog.log(`Ratio won by ${winner.author.username}#${winner.author.discriminator} (${winner.author.id}) and lost by ${loser.author.username}#${loser.author.discriminator} (${loser.author.id}) (message ${winner.id})`)
+    
+    if(guild.xpRbEnabled) {
+      await globals.db.guildMember.updateMany({
+        where: {
+          guildId: guild.id,
+          userId: winner.author.id
+        },
+        data: {
+          xp: {
+            increment: guild.xpRbAmount
+          }
+        }
+      })
+    }
   }
 
   setTimeout(declareWinner, 10 * 1000)
