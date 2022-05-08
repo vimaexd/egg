@@ -1,11 +1,10 @@
-import { GuildXPRoleReward } from "@prisma/client";
-import axios from "axios";
 import Discord, { ButtonInteraction, Constants, GuildMember, MessageEmbed } from "discord.js"
 import Command from "../../../classes/Commands/Command"
 import Utils from "../../../classes/Utils";
 import xp from "../../../classes/Xp";
-import { PermissionGroup } from "../../../utils/fgstatic";
 import { YarnGlobals } from "../../../utils/types";
+import getGuildMember from "../../../db/utils/getGuildMember";
+import YesNoCollector from "../../../utils/YesNoCollector";
 
 const utils = new Utils()
 const configKeys: any = [
@@ -77,7 +76,10 @@ const configKeys: any = [
     description: "Set if users will get XP for winning a Ratio Battle",
     dbKey: "xpRbEnabled",
     responseType: "boolean",
-    responses: []
+    responses: [
+      { value: "true", name: "Yes" },
+      { value: "false", name: "No" }
+    ]
   },
   {
     name: "Ratio Battle XP Amount",
@@ -86,7 +88,31 @@ const configKeys: any = [
     dbKey: "xpRbAmount",
     responseType: "number",
     responses: []
-  }
+  },
+  {
+    name: "Server XP multiplier",
+    value: 'guildxpmult',
+    description: "Sets the multiplier for all XP earned in this server.",
+    dbKey: "xpGuildMult",
+    responseType: "float",
+    responses: []
+  },
+  {
+    name: "Activity streak minimum messages",
+    value: "activityminmsg",
+    description: "Set the minimum messages required for a day to be marked active on a user streak",
+    dbKey: "xpStreakMsgReq",
+    responseType: "number",
+    responses: []
+  },
+  {
+    name: "Activity streak combo amount",
+    value: "activitycombo",
+    description: "Set the XP combo granted for each active day",
+    dbKey: "xpStreakCombo",
+    responseType: "float",
+    responses: []
+  },
 ];
 
 const handleKvSetting = async (interaction: Discord.CommandInteraction, globals: YarnGlobals) => {
@@ -100,8 +126,7 @@ const handleKvSetting = async (interaction: Discord.CommandInteraction, globals:
     case "set": 
       let v: any = interaction.options.getString("value");
       if(
-        targetKey.responseType != "boolean"
-        && targetKey.responseType != "number"
+        targetKey.responseType == "enum"
         && !targetKey.responses.includes()
       ){
         return interaction.reply("Value is not in allowed value list!")
@@ -115,6 +140,11 @@ const handleKvSetting = async (interaction: Discord.CommandInteraction, globals:
       if(targetKey.responseType == "number") {
         if(!utils.isNumeric(v)) return interaction.reply("Value must be a number")
         v = parseInt(v);
+      }
+
+      if(targetKey.responseType == "float") {
+        if(!utils.isFloat(v)) return interaction.reply("Value must be a float (number with a decimal point)")
+        v = parseFloat(v);
       }
     
       await globals.db.guild.updateMany({
@@ -267,7 +297,7 @@ const handleBlacklistedChannelsSetting = async (interaction: Discord.CommandInte
 const Cmd = new Command({
     enabled: true,
     name: "xpconfig",
-    restrict: PermissionGroup.ADMIN,
+    restrict: true,
     description: "Configure the XP system",
     options: [
       {
@@ -395,7 +425,49 @@ const Cmd = new Command({
             description: "See all blacklisted channels",
           },
         ]
-      }
+      },
+      {
+        type: "SUB_COMMAND_GROUP",
+        name: "user",
+        description: "Configure users' XP",
+        options: [
+          {
+            type: "SUB_COMMAND",
+            name: "set",
+            description: "Set a user's XP amount",
+            options: [
+              {
+                type: "USER", 
+                name: "user",
+                description: "The user you would like to set the XP amount of",
+                required: true
+              },
+              {
+                type: "NUMBER",
+                name: "amount",
+                description: "The amount of XP this user should have",
+                required: true,
+              }
+            ]
+          },
+          {
+            type: "SUB_COMMAND",
+            name: "resetall",
+            description: "⚠️ RESET ALL XP SERVER WIDE ⚠️",
+            options: [
+              {
+                type: "STRING", 
+                name: "confirm",
+                description: "Are you sure?",
+                choices: [{
+                  name: "I acknowledge this is non-reversible", value: "confirm"
+                }],
+                required: true
+              },
+            ]
+          }
+        ]
+      },
     ],
     autocomplete(interaction, client, globals) {
       const key = interaction.options.getString('key')
@@ -417,7 +489,52 @@ const Cmd = new Command({
     case "blacklisted_channels":
       await handleBlacklistedChannelsSetting(interaction, globals);
       break;
-    
+
+    case "user":
+      switch(interaction.options.getSubcommand()) {
+        case "set":
+          let _target = interaction.options.getUser("user");
+
+          let target;
+          try {
+            target = await interaction.guild.members.fetch(_target);
+          } catch(err) {
+            console.log(err)
+            return interaction.reply(`Error fetching your server profile!`)
+          }
+
+          const profile = await getGuildMember(target);
+          await globals.db.guildMember.updateMany({
+            where: {
+              guildId: interaction.guild.id,
+              userId: target.id
+            },
+            data: {
+              xp: interaction.options.getNumber('amount')
+            }
+          })
+          interaction.reply(":white_check_mark: XP set")
+          break;
+        
+        case "resetall":
+          await YesNoCollector({
+            interaction,
+            question: "Are you sure you want to wipe all XP? **This is irreversable!**",
+            onYes: async (btn) => {
+              await globals.db.guildMember.updateMany({
+                where: {
+                  guildId: interaction.guild.id
+                },
+                data: {
+                  xp: 0
+                }
+              })
+              btn.update({ content: ":white_check_mark: It's all gone.", components: [] })
+            }
+          })
+          break;
+      }
+      break;
 
   }
 })

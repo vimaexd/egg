@@ -11,7 +11,7 @@ const Cmd = new Command({
     enabled: true,
     name: "ratiobattles",
     description: "Configure Ratio battles",
-    restrict: PermissionGroup.ALL_STAFF,
+    restrict: true,
     options: [
     {
       name: "toggle",

@@ -100,37 +100,37 @@ class Loaders {
       const fg = await this.client.guilds.fetch(getFluteGangId())
       const fgCommands = await fg.commands.fetch();
       
-      fgCommands.forEach(async (c) => {
-        let perms: Discord.ApplicationCommandPermissionData[] = [
-          {
-            id: "577743466940071949",
-            permission: true,
-            type: "USER",
-          },
-          {
-            id: "455160065050148865",
-            permission: true,
-            type: "USER",
-          },
-        ]
+      // fgCommands.forEach(async (c) => {
+      //   let perms: Discord.ApplicationCommandPermissionData[] = [
+      //     {
+      //       id: "577743466940071949",
+      //       permission: true,
+      //       type: "USER",
+      //     },
+      //     {
+      //       id: "455160065050148865",
+      //       permission: true,
+      //       type: "USER",
+      //     },
+      //   ]
 
-        const localCommand = commands.get(c.name)
-        if(!localCommand.meta.restrict) return;
+      //   const localCommand = commands.get(c.name)
+      //   if(!localCommand.meta.restrict) return;
 
-        getPermissionRoles()[localCommand.meta.restrict].forEach(r => {
-          if(!r) return;
-          perms.push({
-            id: r,
-            permission: true,
-            type: "ROLE",
-          })
-        })
+      //   getPermissionRoles()[localCommand.meta.restrict].forEach(r => {
+      //     if(!r) return;
+      //     perms.push({
+      //       id: r,
+      //       permission: true,
+      //       type: "ROLE",
+      //     })
+      //   })
 
-        await c.permissions.set({
-          permissions: perms
-        })
-        log.log(`Set permissions for /${c.name}`)
-      })
+      //   await c.permissions.set({
+      //     permissions: perms
+      //   })
+      //   log.log(`Set permissions for /${c.name}`)
+      // })
 
       log.log(`Updated ${commands.size} slash commands!`)
     } catch (err) {

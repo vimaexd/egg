@@ -6,6 +6,7 @@ import { PrismaClient } from '@prisma/client'
 import { YarnGlobals, YarnShardMessage } from "../utils/types"
 import Loaders from "./Loaders";
 import Log from "./Log";
+import notifications from "./Notifications";
 
 
 export default class Yarn {
@@ -39,6 +40,7 @@ export default class Yarn {
 
     // Other Globals
     this.globals.db = new PrismaClient()
+    this.globals.notifications = notifications;
     this.init();
   }
 

@@ -28,6 +28,17 @@ class Utils {
         return !isNaN(parseInt(str)) && !isNaN(parseFloat(str))
     }
 
+    isFloat = (str: string) => {
+      var floatRegex = /^-?\d+(?:[.,]\d*?)?$/;
+      if (!floatRegex.test(str))
+          return false;
+  
+      let fl = parseFloat(str);
+      if (isNaN(fl))
+          return false;
+      return true;
+    }
+
     nFormatter(num: number, digits: number) {
       const lookup = [
         { value: 1, symbol: "" },

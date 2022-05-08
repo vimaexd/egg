@@ -12,7 +12,7 @@ const Cmd = new Command({
     enabled: false,
     name: "rolemenu",
     description: "Create a reaction menu to let users self-assign roles",
-    restrict: PermissionGroup.ADMIN,
+    restrict: true,
     options: [
     {
       name: "post",

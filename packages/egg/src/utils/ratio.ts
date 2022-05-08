@@ -4,6 +4,9 @@ import { YarnGlobals } from "./types";
 import getGuild from "../db/utils/getGuild";
 import Log from "../classes/Log";
 import ratioInsults from './ratioInsults';
+import xp from "../classes/Xp";
+import achievements, { AchievementEvent } from "../classes/Achievements";
+import getGuildMember from "../db/utils/getGuildMember";
 
 const ratioLog = new Log({prefix: "RatioBattles"})
 const ratioEmoji = "👍"
@@ -59,13 +62,19 @@ export default async (message: Discord.Message, client: Discord.Client, globals:
     
     const originalRatios = message.reactions.resolve(ratioEmoji).count;
     const counterRatios = counter.reactions.resolve(ratioEmoji).count;
-    let rigged = false;
 
+    if(originalRatios == 1 && counterRatios == 1) {
+      const profile1 = await getGuildMember(counter.member);
+      const profile2 = await getGuildMember(message.member);
+      await achievements.giveAchievement(profile1, 'eggbot:ghosted');
+      await achievements.giveAchievement(profile2, 'eggbot:ghosted');
+    }
 
     let loser = (originalRatios > counterRatios) ? counter : message;
     let winner = (originalRatios > counterRatios) ? message : counter;
 
-    // rigging code
+    // rigging code: DO NOT UNCOMMENT
+    // let rigged = false;
     // if(loser.author.id == "577743466940071949") {
     //   let temp = winner;
     //   winner = loser;
@@ -86,7 +95,7 @@ export default async (message: Discord.Message, client: Discord.Client, globals:
 
     loser.reply({content: `ratio${insults}`})
 
-    if(rigged) return;
+    // if(rigged) return;
     await globals.db.guild.update({
       where: { id: guild.id },
       data: {
@@ -104,18 +113,10 @@ export default async (message: Discord.Message, client: Discord.Client, globals:
     ratioLog.log(`Ratio won by ${winner.author.username}#${winner.author.discriminator} (${winner.author.id}) and lost by ${loser.author.username}#${loser.author.discriminator} (${loser.author.id}) (message ${winner.id})`)
     
     if(guild.xpRbEnabled) {
-      await globals.db.guildMember.updateMany({
-        where: {
-          guildId: guild.id,
-          userId: winner.author.id
-        },
-        data: {
-          xp: {
-            increment: guild.xpRbAmount
-          }
-        }
-      })
+      await xp.giveXp(message.guild, winner.author.id, guild.xpRbAmount)
     }
+
+    await achievements.updateFilteredByEvent(winner.member, AchievementEvent.RATIO);
   }
 
   setTimeout(declareWinner, 10 * 1000)

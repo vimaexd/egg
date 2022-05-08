@@ -8,6 +8,21 @@ import Xp from '../../../classes/Xp';
 import Big from "big.js";
 import getGuild from "../../../db/utils/getGuild";
 import Utils from "../../../classes/Utils";
+import { stringyId } from "../../../utils/fgstatic";
+import betaTesters from "../../../utils/betaTesters";
+
+const badgeLevels = [
+  0, 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80
+]
+
+registerFont(
+  path.join(__dirname, "../../../../assets/fonts/ComicSans.ttf"), 
+  {
+    family: "Comic Sans",
+    weight: "400",
+  }
+)
+
 
 registerFont(
   path.join(__dirname, "../../../../assets/fonts/Montserrat-Regular.ttf"), 
@@ -112,51 +127,93 @@ const Cmd = new Command({
   const rankCard = createCanvas(1000, 210);
   const ctx = rankCard.getContext('2d');
 
+  let fontFamily = "Montserrat";
+  if(target.id == stringyId) {
+    fontFamily = "Comic Sans";
+  }
+
   // bg
   ctx.fillStyle = "#000"
   roundRect(ctx, 0, 0, 1000, 210, 8, true)
 
   // pfp
-  const pfp = await loadImage(target.displayAvatarURL({ size: 64, format: "png" }))
+  let pfpSrc = target.displayAvatarURL({ size: 64, format: "png" });
+  if(target.id == stringyId) {
+    pfpSrc = path.join(__dirname, "../../../../assets/misc/sweeney.png");
+  }
+  const pfp = await loadImage(pfpSrc)
   ctx.drawImage(roundPfp(pfp), 32, 32, 64, 64)
   
   // username
   ctx.fillStyle = "#fff"
-  ctx.font = '800 50px Montserrat'
-  const usernameMeasure = ctx.measureText(truncateString(target.user.username, 16));
+  if(betaTesters.includes(target.id)) {
+    ctx.fillStyle = "#E698FF"
+  }
+
+  ctx.font = `800 50px ${fontFamily}`
+  const usernameMeasure = ctx.measureText(truncateString(target.user.username, 14));
   const usernameY = 32 + (64 / 2) + (32 / 2)
-  ctx.fillText(truncateString(target.user.username, 16), 32 + 64 + 16, usernameY)
+  ctx.fillText(truncateString(target.user.username, 14), 32 + 64 + 16, usernameY, 480)
   
   // discrim
   ctx.fillStyle = "#CECECE"
-  ctx.font = '400 36px Montserrat'
+  ctx.font = `400 36px ${fontFamily}`
   const discrimMeasure = ctx.measureText("#" + target.user.discriminator);
   ctx.fillText("#" + target.user.discriminator, 32 + 64 + 16 + usernameMeasure.width + 4, usernameY)
   
   // rank num
-  ctx.fillStyle = "#fff"
-  ctx.font = '800 50px Montserrat'
+  switch(leaderboardPos){
+    case 1:
+      ctx.fillStyle = "#DFB63F"
+      break;
+    case 2:
+      ctx.fillStyle = "#9C9C9C"
+      break;
+    case 3:
+      ctx.fillStyle = "#dd5f44"
+      break;
+    default: 
+      ctx.fillStyle = "#fff"
+      break;
+  }
+
+  ctx.font = `800 50px ${fontFamily}`
   const rankMeasure = ctx.measureText(leaderboardPos.toString());
-  const rankWidth = rankCard.width - 32 - rankMeasure.width - 6;
+  const rankWidth = rankCard.width - 32 - rankMeasure.width - 8;
   ctx.fillText(leaderboardPos.toString(), rankCard.width - 32 - rankMeasure.width, usernameY)
   
   // rank #
-  ctx.font = '400 50px Montserrat'
+  ctx.font = `400 50px ${fontFamily}`
   const hashMeasure = ctx.measureText("#");
   const hashWidth = rankWidth - hashMeasure.width - 2
   ctx.fillText("#", hashWidth, usernameY)
   
   // level num
-  ctx.font = '800 50px Montserrat'
+  ctx.fillStyle = "#fff"
+  ctx.font = `800 50px ${fontFamily}`
   const lvlNumMeasure = ctx.measureText(level.toString());
   const lvlNumWidth = hashWidth - 42 - lvlNumMeasure.width;
   ctx.fillText(level.toString(), lvlNumWidth, usernameY)
   
   // level LVL
-  ctx.font = '400 50px Montserrat'
+  ctx.font = `400 50px ${fontFamily}`
   const lvlTextMeasure = ctx.measureText("LVL");
   const lvlTextWidth = lvlNumWidth - 10 - lvlTextMeasure.width;
   ctx.fillText("LVL", lvlTextWidth, usernameY)
+
+  // badge (48*48)
+  const badgeWidth = lvlTextWidth - 12 - 48
+  const closestLevel = badgeLevels
+    .sort((a, b) => {
+        return Math.abs(level - a) - Math.abs(level - b);
+    })
+    [0]
+
+  if(closestLevel != 0) {
+    const badge = await loadImage(path.join(__dirname, `../../../../assets/level_badges/LVL_${closestLevel}.png`))
+    ctx.drawImage(badge, badgeWidth, usernameY - 48 + 5, 48, 48)
+  }
+
   
   // base bar
   ctx.fillStyle = "#242424"
@@ -181,29 +238,29 @@ const Cmd = new Command({
   roundRect(ctx, 32, rankCard.height - 100, filledBarWidth, 64, 40, true)
   
   // XP amount
-  let xpAmount = nFormatter(new Big(targetProfile.xp.toString()).toNumber(), 3)
+  let xpAmount = nFormatter(new Big(targetProfile.xp.toString()).toNumber(), 2)
   ctx.fillStyle = "#fff"
-  ctx.font = '800 36px Montserrat'
+  ctx.font = `800 36px ${fontFamily}`
   const xpAmountMeasure = ctx.measureText(xpAmount);
   ctx.fillText(xpAmount, 32 + 26, rankCard.height - 100 + 34 + 10)
   
   // XP text
-  ctx.font = '400 36px Montserrat'
+  ctx.font = `400 36px ${fontFamily}`
   ctx.fillText("XP", 32 + 26 + xpAmountMeasure.width + 8, rankCard.height - 100 + 34 + 10)
 
   // Required text
-  ctx.font = '400 36px Montserrat'
+  ctx.font = `400 36px ${fontFamily}`
   ctx.fillText("XP", 32 + 26 + xpAmountMeasure.width + 8, rankCard.height - 100 + 34 + 10)
 
   // Required text
-  ctx.font = '400 18px Montserrat'
+  ctx.font = `400 18px ${fontFamily}`
   const requiredMeasure = ctx.measureText("Required")
   ctx.fillText("required", rankCard.width - 32 - requiredMeasure.width - 26, rankCard.height - 100 + 34 + 5)
 
   // Required XP
   let requiredXp = Xp.calculateMinXpRequired(new Big(level).add(1)).sub(new Big(targetProfile.xp.toString()))
-  let formattedRequired = nFormatter(requiredXp.toNumber(), 3)
-  ctx.font = '800 18px Montserrat'
+  let formattedRequired = nFormatter(requiredXp.toNumber(), 2)
+  ctx.font = `800 18px ${fontFamily}`
   const requireXpMeasure = ctx.measureText(formattedRequired)
   ctx.fillText(formattedRequired, rankCard.width - 32 - requiredMeasure.width - requireXpMeasure.width - 30, rankCard.height - 100 + 34 + 5)
 

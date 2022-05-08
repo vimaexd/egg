@@ -5,8 +5,12 @@ import dayjs from 'dayjs';
 import { bot } from '../index'; 
 import Big from 'big.js';
 import { GuildXPBlacklistedChannel } from '@prisma/client';
+import Log from './Log';
+import achievements, { AchievementEvent } from './Achievements';
 
-const undefinedKeyValueUtil = (obj: any, key: any) => {
+const log = new Log({ prefix: "XP" })
+
+const getProperty = (obj: any, key: any) => {
   if(!obj) return undefined;
   if(!obj.hasOwnProperty(key)) return undefined;
   else return obj[key];
@@ -22,17 +26,24 @@ interface IGuildUserStore<T> {
   }
 }
 
+interface IXpChangeCache {
+  time: number
+  amount: number
+};
+
 class XP {
   guildPrefs: IGuildStore<any>;
   cooldownStore: IGuildUserStore<number>;
   msgCooldownStore: IGuildUserStore<number>;
   lastMsgStore: IGuildUserStore<string>;
+  activityCache: IGuildUserStore<IXpChangeCache[]>;
   
   constructor() {
     this.guildPrefs = {};
     this.cooldownStore = {};
     this.msgCooldownStore = {};
     this.lastMsgStore = {};
+    this.activityCache = {};
   }
 
   async cachePreferences(target: Guild) {
@@ -40,6 +51,51 @@ class XP {
     const prefKeys = Object.keys(guild).filter(k => k.startsWith("xp"));
     const prefs = prefKeys.reduce((obj: any, cur: string) => ({...obj, [cur]: guild[cur]}), {})
     this.guildPrefs[guild.id] = prefs;
+  }
+
+  private async cleanupActivityCache(guildId: string, userId: string) {
+    const userCache = getProperty(this.activityCache[guildId], userId);
+    if(!userCache) return;
+
+    userCache.forEach((u: IXpChangeCache) => {
+      if(dayjs.unix(u.time).isBefore(dayjs().subtract(5, 'day'))){
+        this.activityCache[guildId][userId].splice(this.activityCache[guildId][userId].indexOf(u), 1)
+      }
+    })
+  }
+
+  getRecentActivity(guildId: string, userId: string) {
+    const prefs = this.guildPrefs[guildId]
+    if(!(userId in this.activityCache[guildId])) return 0;
+
+    const activity = this.activityCache[guildId][userId];
+    if(!activity) return 0;
+    if(activity.length == 0) return 0;
+
+    let last5d = [];
+    for(let i = 0; i < 4; i++){
+      last5d.push(dayjs().subtract(1 + i, 'day').unix())
+    };
+
+    let didPassThreshold = last5d.map((ts) => {
+      let filteredActivity = activity
+      .filter((a) => ts < a.time)
+      .filter((a) => a.time < dayjs.unix(ts).add(1, 'day').unix())
+
+      if(filteredActivity.length >= prefs.xpStreakMsgReq) {
+        return true
+      } else {
+        return false
+      }
+    })
+
+    return didPassThreshold.filter((d) => d == true).length
+  }
+
+  getRecentActivityCombo(guildId: string, userId: string) {
+    const prefs = this.guildPrefs[guildId]
+    const activeDays = this.getRecentActivity(guildId, userId)
+    return activeDays * prefs.xpStreakCombo
   }
 
   async getRank(userXp: bigint, guildId: string) {
@@ -51,6 +107,54 @@ class XP {
         }
       }
     }) + 1
+  }
+
+  async getGuildPrefs(guild: Guild) {
+    if (!this.guildPrefs[guild.id]) {
+      this.lastMsgStore[guild.id]     = {};
+      this.msgCooldownStore[guild.id] = {};
+      this.cooldownStore[guild.id]    = {};
+      this.activityCache[guild.id]    = {};
+      await this.cachePreferences(guild)
+    }
+    return this.guildPrefs[guild.id]
+  }
+
+  async giveXp(guild: Guild, userId: string, xpAmount: number, incrementMessages?: boolean) {
+    const prefs = await this.getGuildPrefs(guild)
+
+    // Update activity cache
+    if(!(userId in this.activityCache[guild.id])) {
+      this.activityCache[guild.id][userId] = []
+    }
+    await this.cleanupActivityCache(guild.id, userId);
+
+    let allMultipliers = prefs.xpGuildMult + this.getRecentActivityCombo(guild.id, userId)
+    let xpToAdd = Math.round(xpAmount * allMultipliers)
+    this.activityCache[guild.id][userId].push({time: dayjs().unix(), amount: xpToAdd })
+
+    let data: any = {
+      xp: {
+        increment: xpToAdd
+      }
+    }
+
+    if(incrementMessages){
+      data["xpMessages"] = {
+        increment: 1
+      }
+    }
+
+    if(process.env.NODE_ENV != "production")
+      log.log(`${userId} awarded +${data.xp.increment} in ${guild.id} (${allMultipliers}x multiplier)`)
+
+    return await bot.globals.db.guildMember.updateMany({
+      where: {
+        userId,
+        guildId: guild.id
+      },
+      data
+    })
   }
 
   calculateLevel(xp: Big) {
@@ -68,14 +172,7 @@ class XP {
     if (message.author.bot) return;
 
     // Cache guild preferences if not already cached
-    if (!this.guildPrefs[message.guild.id]) {
-      this.lastMsgStore[message.guild.id]     = {};
-      this.msgCooldownStore[message.guild.id] = {};
-      this.cooldownStore[message.guild.id]    = {};
-      await this.cachePreferences(message.guild)
-    }
-
-    const prefs = this.guildPrefs[message.guild.id]
+    const prefs = await this.getGuildPrefs(message.guild)
 
     /*
       CHECK 1
@@ -96,7 +193,7 @@ class XP {
       CHECK 3
       Repeat message
     */
-    const lastMsg = undefinedKeyValueUtil(this.lastMsgStore[message.guild.id], message.member.id)
+    const lastMsg = getProperty(this.lastMsgStore[message.guild.id], message.member.id)
     if(lastMsg){
       if(lastMsg == message.content.toLowerCase()) return;
     }
@@ -105,8 +202,8 @@ class XP {
       CHECK 4
       Messages per minute limit + cooldown
     */
-    const timeCooldown = undefinedKeyValueUtil(this.cooldownStore[message.guild.id], message.member.id) || 0
-    const msgCooldown = undefinedKeyValueUtil(this.msgCooldownStore[message.guild.id], message.member.id) || 0
+    const timeCooldown = getProperty(this.cooldownStore[message.guild.id], message.member.id) || 0
+    const msgCooldown = getProperty(this.msgCooldownStore[message.guild.id], message.member.id) || 0
     if(msgCooldown > prefs.xpMaxMsgPerMin && timeCooldown > dayjs().unix()) return;
 
     /*
@@ -129,20 +226,7 @@ class XP {
     if(isBlacklisted) return;
 
     // Assign new XP
-    await bot.globals.db.guildMember.updateMany({
-      where: {
-        userId: message.member.id,
-        guildId: message.guild.id
-      },
-      data: {
-        xp: {
-          increment: 10
-        },
-        xpMessages: {
-          increment: 1
-        }
-      }
-    })
+    await this.giveXp(message.guild, message.author.id, 10, true)
 
     // Update cooldowns
     if(timeCooldown < dayjs().unix()){
@@ -182,6 +266,8 @@ class XP {
         }
       }
     })
+
+    await achievements.updateFilteredByEvent(message.member, AchievementEvent.XPGAIN);
   }
 }
 

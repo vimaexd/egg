@@ -4,6 +4,13 @@ export const getFluteGangId = () => {
   else return "660909173281652807"
 }
 
+export const stringyId = "577743466940071949";
+export const exylId = "455160065050148865";
+
+export const badgeAchEasy = "<:fg_ach_easy:971463706854715503>";
+export const badgeAchHard = "<:fg_ach_hard:971463706867294279>";
+export const badgeAchImpossible = "<:fg_ach_impossible:971463707009892402>";
+
 export enum PermissionGroup {
   NONE = "none",
   ALL_STAFF = "staff",

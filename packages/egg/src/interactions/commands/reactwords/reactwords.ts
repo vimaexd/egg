@@ -11,7 +11,7 @@ const Cmd = new Command({
     enabled: true,
     name: "reactwords",
     description: "Configure reaction words",
-    restrict: PermissionGroup.ALL_STAFF,
+    restrict: true,
     options: [
     {
       name: "toggle",

@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import Command from "../classes/Commands/Command"
 import Loaders from "../classes/Loaders";
 import Log from "../classes/Log";
+import Notifications from "../classes/Notifications";
 
 export interface YarnGlobals {
   prefix?: string;
@@ -12,6 +13,7 @@ export interface YarnGlobals {
   aliases?: Map<string, string>
   log?: Log;
   shardId?: number;
+  notifications?: typeof Notifications;
 }
 
 export enum YarnShardMessageType {

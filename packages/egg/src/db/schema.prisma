@@ -55,6 +55,11 @@ model Guild {
   xpRoleRewards   GuildXPRoleReward[]
   xpBListChan     GuildXPBlacklistedChannel[]
 
+  // XP: Server multiplier
+  xpGuildMult     Float                 @default(1.0)
+  xpStreakMsgReq  Int                   @default(500)
+  xpStreakCombo   Float                 @default(0.1)
+
   // XP: Boost (per messages)
   xpBoostEnabled  Boolean               @default(true)
   xpBoostMsgAmnt  BigInt                @default(100)
@@ -79,6 +84,16 @@ model GuildMember {
   xpBanned    Boolean         @default(false)
 
   rbEnabled   Boolean         @default(true)
+
+  achievements GuildMemberAchievement[]
+}
+
+model GuildMemberAchievement {
+  id        String          @id @default(uuid())
+  member    GuildMember     @relation(fields: [memberId], references: [id])
+  memberId  String
+
+  achId     String
 }
 
 model GuildXPRoleReward {
