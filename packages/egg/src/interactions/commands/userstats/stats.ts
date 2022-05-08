@@ -33,29 +33,31 @@ const subCmdStats = async (client: Client, interaction: CommandInteraction, glob
   embed.addField(`Joined Discord`, `<t:${Math.floor(target.user.createdTimestamp / 1000)}> (<t:${Math.floor(target.user.createdTimestamp / 1000)}:R>)`, true);
 
   // XP
-  embed.addField(
-  `XP`, 
-  `**#${placementInLb}** in ${interaction.guild.name}
-  \`${profile.xp.toLocaleString()}\` XP - LVL ${xp.calculateLevel(new Big(profile.xp.toString()))}
-  `,
-  true
-  )
-
-  embed.addField(
-  `XP Combo`, 
-  `Currently at ${xp.getRecentActivityCombo(interaction.guild.id, target.id) + prefs.xpGuildMult}x`,
-  true
-  )
-
-  let daysActive = xp.getRecentActivity(interaction.guild.id, target.id)
-  embed.addField(
-  `Recent Activity`, 
-  `${`█`.repeat(daysActive)}${`▒`.repeat(5 - daysActive)}
-  **${daysActive}**/5 past days active
-  Gain XP ${prefs.xpStreakMsgReq} times in a day to get a ${prefs.xpStreakCombo}x boost to all XP earnt!
-  `,
-  true
-  )
+  if(prefs.xpEnabled) {
+    embed.addField(
+      `XP`, 
+      `**#${placementInLb}** in ${interaction.guild.name}
+      \`${profile.xp.toLocaleString()}\` XP - LVL ${xp.calculateLevel(new Big(profile.xp.toString()))}
+      `,
+      true
+    )
+    
+    embed.addField(
+      `XP Combo`, 
+      `Currently at ${xp.getRecentActivityCombo(interaction.guild.id, target.id) + prefs.xpGuildMult}x`,
+      true
+    )
+  
+    let daysActive = xp.getRecentActivity(interaction.guild.id, target.id)
+    embed.addField(
+      `Recent Activity`, 
+      `${`█`.repeat(daysActive)}${`▒`.repeat(5 - daysActive)}
+      **${daysActive}**/5 past days active
+      Gain XP ${prefs.xpStreakMsgReq} times in a day to get a ${prefs.xpStreakCombo}x boost to all XP earnt!
+      `,
+      true
+    )
+  }
 
   embed.setFooter({ text: target.user.id });
   (target.user.id == "210347599578791936") && embed.addField("Marwan", ":FlushedMarwan:") 
