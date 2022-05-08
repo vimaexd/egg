@@ -1,5 +1,5 @@
 src/legacy
-yarn.lock
+# yarn.lock
 yarn-error.log
 .env
 config/conf.json
