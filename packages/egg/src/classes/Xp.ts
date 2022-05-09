@@ -46,6 +46,10 @@ class XP {
     this.activityCache = {};
   }
 
+  /**
+   * Cache preferences from the Database to the bot
+   * @param target Guild to cache preferences for
+   */
   async cachePreferences(target: Guild) {
     const guild: any = await getGuild(target);
     const prefKeys = Object.keys(guild).filter(k => k.startsWith("xp"));
@@ -64,6 +68,12 @@ class XP {
     })
   }
 
+  /**
+   * Get the amount of days a member was marked active for
+   * @param guildId The guild ID of the member
+   * @param userId The user ID of the member
+   * @returns number
+   */
   getRecentActivity(guildId: string, userId: string) {
     const prefs = this.guildPrefs[guildId]
     if(!(userId in this.activityCache[guildId])) return 0;
@@ -92,12 +102,24 @@ class XP {
     return didPassThreshold.filter((d) => d == true).length
   }
 
+  /**
+   * Get the multiplier for a user based on their recent activity days
+   * @param guildId The guild ID of the member
+   * @param userId The user ID of the member
+   * @returns float
+   */
   getRecentActivityCombo(guildId: string, userId: string) {
     const prefs = this.guildPrefs[guildId]
     const activeDays = this.getRecentActivity(guildId, userId)
     return activeDays * prefs.xpStreakCombo
   }
 
+  /**
+   * Get the placement of a user on the leaderboard based on how much XP they have
+   * @param userXp The amount of XP the user has
+   * @param guildId The guild to check rank in
+   * @returns 
+   */
   async getRank(userXp: bigint, guildId: string) {
     return await bot.globals.db.guildMember.count({
       where: {
@@ -109,6 +131,11 @@ class XP {
     }) + 1
   }
 
+  /**
+   * Get all cached server preferences and cache if not already cached
+   * @param guild The target guild to get preferences for
+   * @returns guildPrefs
+   */
   async getGuildPrefs(guild: Guild) {
     if (!this.guildPrefs[guild.id]) {
       this.lastMsgStore[guild.id]     = {};
@@ -120,6 +147,14 @@ class XP {
     return this.guildPrefs[guild.id]
   }
 
+  /**
+   * Give XP to a user
+   * @param guild The guild to give XP in
+   * @param userId The user to give XP to
+   * @param xpAmount The amount of XP to give
+   * @param incrementMessages Whever to increment the "messages" counter
+   * @returns payload
+   */
   async giveXp(guild: Guild, userId: string, xpAmount: number, incrementMessages?: boolean) {
     const prefs = await this.getGuildPrefs(guild)
 
@@ -157,16 +192,31 @@ class XP {
     })
   }
 
+  /**
+   * Calculate the level of a user based on how much XP they have
+   * @param xp The amount of XP the user has as a BigJS number
+   * @returns number
+   */
   calculateLevel(xp: Big) {
     return xp.div(40).sqrt().round(0, 0).toNumber()
     // return Math.floor(Math.sqrt(xp / 40))
   }
   
+  /**
+   * Calculate minimum XP required to reach a certain level
+   * @param level The target level as a BigJS number
+   * @returns BigJS number
+   */
   calculateMinXpRequired(level: Big){
     return level.pow(2).round(0, 0).mul(40)
     // return 40 * Math.floor(Math.pow(level, 2))
   }
 
+  /**
+   * Run all XP checks and give XP if necessary
+   * @param message Discord message to check
+   * @returns void
+   */
   async runXp(message: Message) {
     if (!message.channel.isText) return;
     if (message.author.bot) return;

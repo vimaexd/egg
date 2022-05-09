@@ -48,6 +48,12 @@ class Achievements {
     this.log = new Log({ prefix: "Achievements" })
   }
 
+  /**
+   * Assign an achievement to a user
+   * @param user GuildMemberExtras The user to give the achievement to
+   * @param achievementId The id of the achievement to give
+   * @returns void
+   */
   async giveAchievement(user: GuildMemberExtras, achievementId: string) {
     const exists = await bot.globals.db.guildMemberAchievement.findFirst({
       where: {memberId: user.id, achId: achievementId}
@@ -68,6 +74,12 @@ class Achievements {
     }
   }
 
+  /**
+   * Remove an achievement from a user
+   * @param user GuildMemberExtras The user to remove the achievement from
+   * @param achievementId The id of the achievement to remove
+   * @returns void
+   */
   async removeAchievement(user: GuildMemberExtras, achievementId: string) {
     const exists = await bot.globals.db.guildMemberAchievement.findFirst({
       where: {memberId: user.id, achId: achievementId}
@@ -88,6 +100,11 @@ class Achievements {
     }
   }
   
+  /**
+   * Update the achievements for a user based on an event
+   * @param member GuildMemberExtras The user to update the achievements for
+   * @param eventType The event to filter the achievements by
+   */
   async updateFilteredByEvent(member: DiscordGuildMember, eventType: AchievementEvent) {
     const toCheck = this.data.filter((a) => (a.eventType == eventType));
     const toCheckFns = toCheck.map((a) => (a.check(member)));
@@ -109,6 +126,10 @@ class Achievements {
     })
   }
 
+  /**
+   * Register a new achievement
+   * @param ach The achievement to register
+   */
   register(ach: IAchievement<AchievementEvent>) {
     this.data.push(ach);
   }
