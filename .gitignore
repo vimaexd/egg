@@ -6,3 +6,7 @@ config/conf.json
 node_modules
 data
 package-lock.json
+
+.next
+.vercel
+.sentryclirc
