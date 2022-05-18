@@ -1,6 +1,7 @@
 import { GuildMember, MessageEmbed } from "discord.js";
 import { bot } from "..";
 import achievements, { DummyAchievement } from "../classes/Achievements";
+import { handleErr } from "../utils/ErrorHandler";
 import Log from "./Log";
 
 class Notifications {
@@ -17,9 +18,12 @@ class Notifications {
 
     try {
       await member.send({ embeds: [NotifEmbed] })
-    } catch(err) { 
+    } catch(err: any) { 
+      if("code" in err){
+        if(err.code === 50013) return; // DMs disabled
+      }
       this.log.log("Error pushing notification");
-      console.log(err)
+      handleErr(err);
      }
   }
 }

@@ -7,6 +7,7 @@ import ratioInsults from './ratioInsults';
 import xp from "../classes/Xp";
 import achievements, { AchievementEvent } from "../classes/Achievements";
 import getGuildMember from "../db/utils/getGuildMember";
+import { handleErr } from "./ErrorHandler";
 
 const ratioLog = new Log({prefix: "RatioBattles"})
 const ratioEmoji = "👍"
@@ -57,7 +58,8 @@ export default async (message: Discord.Message, client: Discord.Client, globals:
     try {
       await promptMessage.delete();
     } catch(err) {
-      console.log(err)
+      handleErr(err)
+      message.channel.send("Unfortunately, the bot ran into an error and the ratio battle had to be cancelled :(")
     }
     
     const originalRatios = message.reactions.resolve(ratioEmoji).count;

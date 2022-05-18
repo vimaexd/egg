@@ -1,4 +1,4 @@
-import Discord from "discord.js";
+import Discord, { DiscordAPIError } from "discord.js";
 import { YarnGlobals } from "../utils/types";
 
 import detectRatio from '../utils/ratio';
@@ -20,6 +20,7 @@ export default async (message: Discord.Message, client: Discord.Client, globals:
       if(new RegExp(k).test(message.content.toLowerCase())){
         const guild = await getGuild(message.guild);
         if(!guild.rwEnabled) return;
+        if(!message.react)
         try {
           await message.react(reactionWords[k]);
         } catch(err) {

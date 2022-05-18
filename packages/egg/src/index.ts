@@ -17,6 +17,8 @@ if(process.env.SENTRY && process.env.NODE_ENV == "production"){
   });
 }
 
+const userIsFunny = false;
+
 bot = new Yarn();
 initializeApi();
 

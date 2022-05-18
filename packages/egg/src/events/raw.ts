@@ -42,7 +42,7 @@ export default async (event: any, client: Discord.Client, globals: YarnGlobals) 
             })
     
         await log_channel.send({embeds: [emojEmbed]})
-    } catch(err) {
-      console.log("react log failed - " + err)
+    } catch(_) {
+      null;
     }
 }

@@ -3,6 +3,7 @@ import Command from "../classes/Commands/Command"
 import { YarnGlobals } from "../utils/types";
 
 import BtnRolemenuHandler from '../interactions/buttons/rolemenu';
+import { handleErr } from "../utils/ErrorHandler";
 
 export default async (_interaction: Discord.Interaction, client: Discord.Client, globals: YarnGlobals) => {
   if(_interaction.channel.type == "DM") return;
@@ -23,6 +24,7 @@ export default async (_interaction: Discord.Interaction, client: Discord.Client,
           await cmd.run(client, interaction, globals)
         } catch(err) {
           console.log(`Error with command /${cmd.meta.name} run by ${interaction.user.username}#${interaction.user.discriminator}  - ${err}`)
+          handleErr(err)
         }
 
         globals.log.log(`${interaction.user.username}#${interaction.user.discriminator} ran command /${cmd.meta.name}`)
@@ -47,6 +49,6 @@ export default async (_interaction: Discord.Interaction, client: Discord.Client,
         }
     }
   } catch(err) {
-    console.log(err)
+    handleErr(err)
   }
 }

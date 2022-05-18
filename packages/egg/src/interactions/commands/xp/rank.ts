@@ -10,6 +10,7 @@ import getGuild from "../../../db/utils/getGuild";
 import Utils from "../../../classes/Utils";
 import { stringyId } from "../../../utils/fgstatic";
 import betaTesters from "../../../utils/betaTesters";
+import { handleErr } from "../../../utils/ErrorHandler";
 
 const badgeLevels = [
   0, 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80
@@ -113,7 +114,7 @@ const Cmd = new Command({
   try {
     target = await interaction.guild.members.fetch(_target);
   } catch(err) {
-    console.log(err)
+    handleErr(err);
     return interaction.reply(`Error fetching your server profile!`)
   }
 
@@ -203,9 +204,10 @@ const Cmd = new Command({
 
   // badge (48*48)
   const badgeWidth = lvlTextWidth - 12 - 48
+  const normalizedLevel = level - 1
   const closestLevel = badgeLevels
     .sort((a, b) => {
-        return Math.abs(level - a) - Math.abs(level - b);
+        return Math.abs(normalizedLevel - a) - Math.abs(normalizedLevel - b);
     })
     [0]
 

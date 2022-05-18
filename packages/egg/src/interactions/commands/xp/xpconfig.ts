@@ -5,6 +5,7 @@ import xp from "../../../classes/Xp";
 import { YarnGlobals } from "../../../utils/types";
 import getGuildMember from "../../../db/utils/getGuildMember";
 import YesNoCollector from "../../../utils/YesNoCollector";
+import { handleErr } from "../../../utils/ErrorHandler";
 
 const utils = new Utils()
 const configKeys: any = [
@@ -499,7 +500,7 @@ const Cmd = new Command({
           try {
             target = await interaction.guild.members.fetch(_target);
           } catch(err) {
-            console.log(err)
+            handleErr(err)
             return interaction.reply(`Error fetching your server profile!`)
           }
 

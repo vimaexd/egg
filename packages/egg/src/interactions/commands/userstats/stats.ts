@@ -7,6 +7,7 @@ import _ from 'lodash';
 import { YarnGlobals } from "../../../utils/types";
 
 import subCmdAchievements from './_achievements';
+import { handleErr } from "../../../utils/ErrorHandler";
 const subCmdStats = async (client: Client, interaction: CommandInteraction, globals: YarnGlobals) => {
   const _target = interaction.options.getUser("user") || interaction.user
 
@@ -14,7 +15,7 @@ const subCmdStats = async (client: Client, interaction: CommandInteraction, glob
   try {
     target = await interaction.guild.members.fetch(_target);
   } catch(err) {
-    console.log(err)
+    handleErr(err)
     return interaction.reply(`Error fetching your server profile!`)
   }
 

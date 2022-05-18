@@ -10,6 +10,8 @@ services:
     - .env
     ports:
       - ${API_PORT}:9090
+    volumes:
+      - ./data/bot:/app/data
 
   db:
     image: postgres

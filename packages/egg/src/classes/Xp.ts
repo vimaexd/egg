@@ -4,9 +4,12 @@ import getGuildMember from '../db/utils/getGuildMember';
 import dayjs from 'dayjs';
 import { bot } from '../index'; 
 import Big from 'big.js';
-import { GuildXPBlacklistedChannel } from '@prisma/client';
+import { GuildXPBlacklistedChannel, GuildXPRoleReward } from '@prisma/client';
 import Log from './Log';
 import achievements, { AchievementEvent } from './Achievements';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
+import path from 'path';
+import { handleErr } from '../utils/ErrorHandler';
 
 const log = new Log({ prefix: "XP" })
 
@@ -36,7 +39,9 @@ class XP {
   cooldownStore: IGuildUserStore<number>;
   msgCooldownStore: IGuildUserStore<number>;
   lastMsgStore: IGuildUserStore<string>;
+
   activityCache: IGuildUserStore<IXpChangeCache[]>;
+  activityFile: string;
   
   constructor() {
     this.guildPrefs = {};
@@ -44,6 +49,29 @@ class XP {
     this.msgCooldownStore = {};
     this.lastMsgStore = {};
     this.activityCache = {};
+
+    this.activityFile = path.join(__dirname, '../../../../data/bot/activityCache.json');
+    if(!existsSync(this.activityFile)){
+      mkdirSync(path.dirname(this.activityFile), { recursive: true })
+      writeFileSync(this.activityFile, JSON.stringify({}), { encoding: "utf-8" });
+    }
+
+    try {
+      const f = readFileSync(this.activityFile, { encoding: "utf-8" })
+      this.activityCache = JSON.parse(f);
+    } catch(e) {
+      handleErr(e)
+      console.error("Error reading activity file from disk!");
+    }
+  }
+
+  async saveActivityCacheToDisk() {
+    try {
+      writeFileSync(this.activityFile, JSON.stringify(this.activityCache), { encoding: "utf-8" })
+    } catch(e) {
+      handleErr(e)
+      console.error("Error writing activity cache to disk!");
+    }
   }
 
   /**
@@ -141,7 +169,7 @@ class XP {
       this.lastMsgStore[guild.id]     = {};
       this.msgCooldownStore[guild.id] = {};
       this.cooldownStore[guild.id]    = {};
-      this.activityCache[guild.id]    = {};
+      if(!(guild.id in this.activityCache)) this.activityCache[guild.id] = {};
       await this.cachePreferences(guild)
     }
     return this.guildPrefs[guild.id]
@@ -167,6 +195,7 @@ class XP {
     let allMultipliers = prefs.xpGuildMult + this.getRecentActivityCombo(guild.id, userId)
     let xpToAdd = Math.round(xpAmount * allMultipliers)
     this.activityCache[guild.id][userId].push({time: dayjs().unix(), amount: xpToAdd })
+    this.saveActivityCacheToDisk()
 
     let data: any = {
       xp: {
@@ -307,15 +336,39 @@ class XP {
     member = await getGuildMember(message.member);
     const level = this.calculateLevel(new Big(member.xp.toString()));
 
-    (prefs.xpRoleRewards as any[]).forEach((r: any) => {
-      if(r.level <= level) {
+    // find roles that the user is eligible for
+    const rolesIsEligible = prefs.xpRoleRewards.map((r: GuildXPRoleReward) => {
+      return {
+        eligible: (level >= r.level),
+        ...r
+      }
+    })
+
+    if(rolesIsEligible.filter((r: any) => r.eligible).length > 0){
+      const highestEligibleRole = rolesIsEligible
+        .filter((r: any) => r.eligible)
+        .sort((a: any, b: any) => b.level - a.level)[0]
+
+      // remove past level roles
+      // TODO: make this configurable
+      rolesIsEligible.forEach((r: any) => {
+        if(r.roleId == highestEligibleRole.roleId) return;
+
+        if(message.member.roles.cache.has(r.roleId)){
+          message.member.roles.remove(r.roleId)
+        }
+      })
+
+      // add eligible role if user dosent have
+      if(!message.member.roles.cache.has(highestEligibleRole.roleId)) {
         try {
-          message.member.roles.add(r.roleId)
+          await message.member.roles.add(highestEligibleRole.roleId)
         } catch(err) {
+          handleErr(err)
           console.log(`failed to add xp role reward - ${err}`)
         }
       }
-    })
+    }
 
     await achievements.updateFilteredByEvent(message.member, AchievementEvent.XPGAIN);
   }

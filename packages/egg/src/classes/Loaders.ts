@@ -5,6 +5,7 @@ import { YarnGlobals } from "../utils/types"
 import Command from "./Commands/Command";
 import Log from "./Log";
 import { getFluteGangId, getPermissionRoles } from "../utils/fgstatic";
+import { handleErr } from "../utils/ErrorHandler";
 
 /**
  * @classdesc Command & event loader for Yarn
@@ -56,12 +57,13 @@ class Loaders {
             this.log.log(`Loaded interaction ${f.name}`);
           } catch (err) {
             this.log.log(`Error loading interaction ${f.name}!`)
-            console.log(err)
+            handleErr(err)
           }
         })
         res(interactions)
       } catch (err) {
         this.log.log("Error loading interactions!")
+        handleErr(err)
         rej(err)
       }
     })
@@ -171,7 +173,7 @@ class Loaders {
           this.log.log(`Loaded event ${f.name}`);
         } catch (err) {
           this.log.log(`Error loading event ${f.name}!`)
-          console.log(err)
+          handleErr(err)
         }
       })
     })
@@ -210,7 +212,7 @@ class Loaders {
           })
           .catch((err) => {
             this.log.log(`Job ${f.name} failed to load!`)
-            console.log(err)
+            handleErr(err);
           })
 
         loaded++;

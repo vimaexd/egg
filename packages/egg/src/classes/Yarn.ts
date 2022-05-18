@@ -48,6 +48,7 @@ export default class Yarn {
     this.loader = new Loaders(this.client, this.globals)
     this.globals.log = new Log({ prefix: "Bot", color: 'magenta', shardId: this.globals.shardId });
     this.globals.log.log("Loading Yarn")
+    if(this.globals.env == "production") this.globals.log.log("RUNNING IN PRODUCTION MODE")
 
     // Load events and jobs
     await this.loader.loadEvents(path.join(__dirname, '..', 'events'))
