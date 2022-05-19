@@ -1,4 +1,8 @@
 import Discord, { AutocompleteInteraction, ButtonInteraction, CommandInteraction, MessageComponentInteraction } from "discord.js";
+
+import "@sentry/tracing";
+import * as Sentry from "@sentry/node";
+
 import Command from "../classes/Commands/Command"
 import { YarnGlobals } from "../utils/types";
 
@@ -20,12 +24,27 @@ export default async (_interaction: Discord.Interaction, client: Discord.Client,
         if(!cmd) return;
         if(!cmd.meta.enabled) return;
 
+        const transaction = Sentry.startTransaction({
+          op: "command",
+          name: "Command Execution",
+          data: {
+            command: cmd.meta,
+            interaction
+          },
+        })
+
+        Sentry.configureScope(scope => {
+          scope.setSpan(transaction)
+        });
+
         try {
           await cmd.run(client, interaction, globals)
         } catch(err) {
           console.log(`Error with command /${cmd.meta.name} run by ${interaction.user.username}#${interaction.user.discriminator}  - ${err}`)
           handleErr(err)
         }
+
+        transaction.finish()
 
         globals.log.log(`${interaction.user.username}#${interaction.user.discriminator} ran command /${cmd.meta.name}`)
         break;

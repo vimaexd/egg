@@ -1,8 +1,10 @@
 import Discord, { Intents } from "discord.js";
 import fs from "fs";
 import path from "path";
-
+import * as Sentry from '@sentry/node';
+import * as Tracing from '@sentry/tracing';
 import { PrismaClient } from '@prisma/client'
+
 import { YarnGlobals, YarnShardMessage } from "../utils/types"
 import Loaders from "./Loaders";
 import Log from "./Log";
@@ -17,6 +19,21 @@ export default class Yarn {
   constructor(){
     // Globals
     this.globals = {}
+    this.globals.log = new Log({ prefix: "Bot", color: 'magenta', shardId: this.globals.shardId });
+
+    // Sentry
+    if(process.env.SENTRY){
+      Sentry.init({
+        dsn: process.env.SENTRY,
+        tracesSampleRate: 1.0,
+        environment: process.env.NODE_ENV,
+        integrations: [
+          new Sentry.Integrations.Console(),
+        ]
+      });
+      this.globals.log.log("Sentry enabled")
+    }
+
     this.globals.commands = new Map;
     this.globals.aliases = new Map;
     this.globals.config = JSON.parse(
@@ -34,7 +51,8 @@ export default class Yarn {
       intents: [
         Intents.FLAGS.GUILDS, 
         Intents.FLAGS.GUILD_MESSAGES,
-        Intents.FLAGS.GUILD_MESSAGE_REACTIONS
+        Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
+        Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS
       ] 
     });
 
@@ -46,7 +64,6 @@ export default class Yarn {
 
   async init(){
     this.loader = new Loaders(this.client, this.globals)
-    this.globals.log = new Log({ prefix: "Bot", color: 'magenta', shardId: this.globals.shardId });
     this.globals.log.log("Loading Yarn")
     if(this.globals.env == "production") this.globals.log.log("RUNNING IN PRODUCTION MODE")
 
