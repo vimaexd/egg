@@ -7,9 +7,9 @@ export const getFluteGangId = () => {
 export const stringyId = "577743466940071949";
 export const exylId = "455160065050148865";
 
-export const badgeAchEasy = "<:fg_ach_easy:971463706854715503>";
-export const badgeAchHard = "<:fg_ach_hard:971463706867294279>";
-export const badgeAchImpossible = "<:fg_ach_impossible:971463707009892402>";
+export const badgeAchEasy       = "971463706854715503";
+export const badgeAchHard       = "971463706867294279";
+export const badgeAchImpossible = "971463707009892402";
 
 export enum PermissionGroup {
   NONE = "none",

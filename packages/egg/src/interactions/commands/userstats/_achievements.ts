@@ -22,7 +22,7 @@ const createPageContent = async (interaction: CommandInteraction, globals: YarnG
       isDummy = true;
     }
 
-    return `${target.badge || ":trophy:"} ${(isDummy) ? `\`${d.achId}\`` : `**${target.name}**`} - ${target.description}`
+    return `${interaction.client.emojis.cache.get(target.badge) || ":trophy:"} ${(isDummy) ? `\`${d.achId}\`` : `**${target.name}**`} - ${target.description}`
   })
   mappedDesc = await Promise.all(mappedDesc);
 
