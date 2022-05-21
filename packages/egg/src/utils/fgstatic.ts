@@ -7,9 +7,21 @@ export const getFluteGangId = () => {
 export const stringyId = "577743466940071949";
 export const exylId = "455160065050148865";
 
-export const badgeAchEasy       = "971463706854715503";
-export const badgeAchHard       = "971463706867294279";
-export const badgeAchImpossible = "971463707009892402";
+let badgeAchEasy, badgeAchHard, badgeAchImpossible;
+if(isDev) {
+  badgeAchEasy        = "971463706854715503";
+  badgeAchHard        = "971463706867294279";
+  badgeAchImpossible  = "971463707009892402";
+} else {
+  badgeAchEasy        = "977347297568497704";
+  badgeAchHard        = "977347385187504128";
+  badgeAchImpossible  = "977347427721941093";
+}
+export {
+  badgeAchEasy,
+  badgeAchHard,
+  badgeAchImpossible
+}
 
 export enum PermissionGroup {
   NONE = "none",

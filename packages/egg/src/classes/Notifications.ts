@@ -1,5 +1,5 @@
 import { GuildMember, MessageEmbed } from "discord.js";
-import { bot } from "..";
+import { Haylin as Haylin } from "..";
 import achievements, { DummyAchievement } from "../classes/Achievements";
 import { handleErr } from "../utils/ErrorHandler";
 import Log from "./Log";
@@ -29,14 +29,14 @@ class Notifications {
 }
 const notifications = new Notifications();
 
-achievements.events.on('achievementGet', async (member, achievementId) => {
+achievements.events.on('achievementGet', async (member: GuildMember, achievementId) => {
   let targetAch = achievements.data.find((a) => a.id == achievementId);
   if(!targetAch) targetAch = DummyAchievement;
 
   await notifications.send(
     member, 
     `:trophy: Achievement unlocked!`, 
-    `${targetAch.badge || ":crown:"} **${targetAch.name}**
+    `${member.client.emojis.cache.get(targetAch.badge) || ":crown:"} **${targetAch.name}**
     *${targetAch.description}*
     `
   )

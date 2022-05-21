@@ -8,7 +8,7 @@ import {
   GuildXPBlacklistedChannel
 } from "@prisma/client";
 import { Guild as DiscordGuild } from "discord.js";
-import { bot } from '../../index';
+import { Haylin as Haylin } from '../../index';
 
 type GuildExtras = Guild & {
   roleMenu:  GuildRoleMenuOption[];
@@ -28,12 +28,12 @@ const relatedNodes =  {
 
 export default async (target: DiscordGuild): Promise<GuildExtras> => {
   return new Promise(async (res, rej) => {
-    let guild = await bot.globals.db.guild.findFirst({
+    let guild = await Haylin.globals.db.guild.findFirst({
       where: { id: target.id },
       include: relatedNodes
     })
     if(!guild) {
-      guild = await bot.globals.db.guild.create({
+      guild = await Haylin.globals.db.guild.create({
         data: { id: target.id },
         include: relatedNodes
       })

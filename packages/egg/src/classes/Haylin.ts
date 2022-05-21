@@ -11,7 +11,7 @@ import Log from "./Log";
 import notifications from "./Notifications";
 
 
-export default class Yarn {
+export default class Haylin {
   private loader: Loaders;
   client: Discord.Client;
   globals: YarnGlobals;
@@ -64,7 +64,7 @@ export default class Yarn {
 
   async init(){
     this.loader = new Loaders(this.client, this.globals)
-    this.globals.log.log("Loading Yarn")
+    this.globals.log.log("Loading Haylin")
     if(this.globals.env == "production") this.globals.log.log("RUNNING IN PRODUCTION MODE")
 
     // Load events and jobs
@@ -95,7 +95,7 @@ export default class Yarn {
 
     this.client.user.setPresence({
       "activities": [
-        {"type": "LISTENING", "name": `Ping! 2`}
+        {"type": "LISTENING", "name": `Ping! 2`},
       ]
     })
     this.globals.log.log("Initialization complete");

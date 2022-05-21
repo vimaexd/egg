@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Guild" ADD COLUMN     "lgChJoin" TEXT NOT NULL DEFAULT E'',
+ADD COLUMN     "lgChReact" TEXT NOT NULL DEFAULT E'';

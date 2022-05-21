@@ -2,7 +2,7 @@ import { Guild, Message } from 'discord.js';
 import getGuild from '../db/utils/getGuild';
 import getGuildMember from '../db/utils/getGuildMember';
 import dayjs from 'dayjs';
-import { bot } from '../index'; 
+import { Haylin as Haylin } from '../index'; 
 import Big from 'big.js';
 import { GuildXPBlacklistedChannel, GuildXPRoleReward } from '@prisma/client';
 import Log from './Log';
@@ -149,7 +149,7 @@ class XP {
    * @returns 
    */
   async getRank(userXp: bigint, guildId: string) {
-    return await bot.globals.db.guildMember.count({
+    return await Haylin.globals.db.guildMember.count({
       where: {
         guildId: guildId,
         xp: {
@@ -212,7 +212,7 @@ class XP {
     if(process.env.NODE_ENV != "production")
       log.log(`${userId} awarded +${data.xp.increment} in ${guild.id} (${allMultipliers}x multiplier)`)
 
-    return await bot.globals.db.guildMember.updateMany({
+    return await Haylin.globals.db.guildMember.updateMany({
       where: {
         userId,
         guildId: guild.id
@@ -317,7 +317,7 @@ class XP {
     // See if a user is eligible for an XP boost
     if((member.xpMessages + 1n) % BigInt(prefs.xpBoostMsgAmnt) == 0n && prefs.xpBoostEnabled){
       const xpBoostAmount = Math.floor(Math.random() * prefs.xpBoostMax) + prefs.xpBoostMin;
-      await bot.globals.db.guildMember.updateMany({
+      await Haylin.globals.db.guildMember.updateMany({
         where: {
           userId: message.member.id,
           guildId: message.guild.id

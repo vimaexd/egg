@@ -1,16 +1,16 @@
 import path from 'path';
 import dotenv from 'dotenv';
-import Yarn from './classes/Yarn';
+import BotInstance from './classes/Haylin';
 import initializeApi from './api/Api';
 
-let bot: Yarn | undefined;
+let Haylin: BotInstance | undefined;
 dotenv.config({
   path: path.join(__dirname, '..', '..')
 })
 
 const userIsFunny = false;
 
-bot = new Yarn();
+Haylin = new BotInstance();
 initializeApi();
 
-export { bot }
+export { Haylin }

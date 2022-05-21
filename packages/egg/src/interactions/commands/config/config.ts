@@ -7,6 +7,8 @@ import getGuildMember from "../../../db/utils/getGuildMember";
 import YesNoCollector from "../../../utils/YesNoCollector";
 import { handleErr } from "../../../utils/ErrorHandler";
 
+import subRoleCnf from './_singularConfig';
+
 const utils = new Utils()
 
 const Cmd = new Command({
@@ -44,31 +46,7 @@ const Cmd = new Command({
 }, async (client, interaction, globals) => {
   switch(interaction.options.getSubcommandGroup()) {
     case "autoassign":
-      switch(interaction.options.getSubcommand()) {
-        case "clear":
-          await globals.db.guild.updateMany({
-            where: {
-              id: interaction.guild.id
-            },
-            data: {
-              aaRoleId: ""
-            }
-          })
-          interaction.reply(":white_check_mark: Auto assign role has been removed")
-          break;
-
-        case "set":
-          const targetRole = interaction.options.getRole('role');
-          await globals.db.guild.updateMany({
-            where: {
-              id: interaction.guild.id
-            },
-            data: {
-              aaRoleId: targetRole.id
-            }
-          })
-          interaction.reply(":white_check_mark: Auto assign role has been set to " + Formatters.bold(targetRole.name))
-      }
+      return subRoleCnf(interaction, "Auto assign", "role", "aaRoleId");
 
   }
 })

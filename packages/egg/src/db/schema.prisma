@@ -72,6 +72,10 @@ model Guild {
 
   // Auto Assign Role
   aaRoleId        String                @default("")
+
+  // Logging
+  lgChReact       String                @default("")
+  lgChJoin        String                @default("")
 }
 
 

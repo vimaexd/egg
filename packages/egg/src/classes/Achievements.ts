@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 import { GuildMember as DiscordGuildMember, Message } from "discord.js";
 import EventEmitter from "events";
-import { bot } from "..";
+import { Haylin as Haylin } from "..";
 import getGuildMember, { GuildMemberExtras } from '../db/utils/getGuildMember';
 import { badgeAchEasy, badgeAchHard, badgeAchImpossible, exylId } from "../utils/fgstatic";
 import Log from "./Log";
@@ -55,18 +55,18 @@ class Achievements {
    * @returns void
    */
   async giveAchievement(user: GuildMemberExtras, achievementId: string) {
-    const exists = await bot.globals.db.guildMemberAchievement.findFirst({
+    const exists = await Haylin.globals.db.guildMemberAchievement.findFirst({
       where: {memberId: user.id, achId: achievementId}
     })
 
     if(!exists) {
-      await bot.globals.db.guildMemberAchievement.create({
+      await Haylin.globals.db.guildMemberAchievement.create({
         data: { memberId: user.id, achId: achievementId }
       })
 
       let discordUser;
       try {
-        discordUser = await bot.client.guilds.cache.get(user.guildId).members.fetch(user.userId);
+        discordUser = await Haylin.client.guilds.cache.get(user.guildId).members.fetch(user.userId);
       } catch(err) { return }
 
       this.events.emit('achievementGet', discordUser, achievementId)
@@ -81,18 +81,18 @@ class Achievements {
    * @returns void
    */
   async removeAchievement(user: GuildMemberExtras, achievementId: string) {
-    const exists = await bot.globals.db.guildMemberAchievement.findFirst({
+    const exists = await Haylin.globals.db.guildMemberAchievement.findFirst({
       where: {memberId: user.id, achId: achievementId}
     })
 
     if(exists) {
-      await bot.globals.db.guildMemberAchievement.delete({
+      await Haylin.globals.db.guildMemberAchievement.delete({
         where: { id: exists.id }
       })
 
       let discordUser;
       try {
-        discordUser = await bot.client.guilds.cache.get(user.guildId).members.fetch(user.userId);
+        discordUser = await Haylin.client.guilds.cache.get(user.guildId).members.fetch(user.userId);
       } catch(err) { return }
 
       this.events.emit('achievementRemove', user, achievementId)
@@ -182,7 +182,7 @@ achievements.register({
   eventType: AchievementEvent.RATIO,
   badge: badgeAchEasy,
   async check(member: DiscordGuildMember) { 
-    const group = await bot.globals.db.ratioBattleResult.groupBy({
+    const group = await Haylin.globals.db.ratioBattleResult.groupBy({
       by: ["loserId"],
       where: {
         guildId: member.guild.id,
@@ -201,7 +201,7 @@ achievements.register({
   eventType: AchievementEvent.RATIO,
   badge: badgeAchImpossible,
   async check(member: DiscordGuildMember) {
-    const data = await bot.globals.db.ratioBattleResult.count({
+    const data = await Haylin.globals.db.ratioBattleResult.count({
       where: {
         guildId: member.guild.id,
         loserId: exylId,

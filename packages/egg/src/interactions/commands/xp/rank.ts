@@ -204,7 +204,7 @@ const Cmd = new Command({
 
   // badge (48*48)
   const badgeWidth = lvlTextWidth - 12 - 48
-  const normalizedLevel = level - 1
+  const normalizedLevel = level
   const closestLevel = badgeLevels
     .sort((a, b) => {
         return Math.abs(normalizedLevel - a) - Math.abs(normalizedLevel - b);

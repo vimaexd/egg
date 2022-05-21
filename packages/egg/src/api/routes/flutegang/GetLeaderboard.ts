@@ -1,8 +1,8 @@
 import { FastifyReply, FastifyRequest, FastifySchema } from "fastify";
-import { bot } from '../../../index';
+import { Haylin as Haylin } from '../../../index';
 import { getFluteGangId } from "../../../utils/fgstatic";
 
-const { globals, client } = bot;
+const { globals, client } = Haylin;
 
 interface IGetLeaderboardParams {
   page: string;
