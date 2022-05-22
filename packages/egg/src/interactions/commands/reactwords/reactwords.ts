@@ -28,7 +28,7 @@ const Cmd = new Command({
       await globals.db.guild.update({
         where: { id: guild.id },
         data: {
-          rbEnabled: {
+          rwEnabled: {
             set: newState
           }
         }
