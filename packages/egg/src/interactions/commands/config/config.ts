@@ -42,32 +42,32 @@ const Cmd = new Command({
           }
         ]
       },
-      // {
-      //   type: "SUB_COMMAND_GROUP",
-      //   name: "log_react",
-      //   description: "Log server reactions to a channel",
-      //   options: [
-      //     {
-      //       type: "SUB_COMMAND",
-      //       name: "clear",
-      //       description: "Stop logging server reactions to a channel",
-      //     },
-      //     {
-      //       type: "SUB_COMMAND",
-      //       name: "set",
-      //       description: "Set a channel to log server reactions to",
-      //       options: [
-      //         {
-      //           type: "CHANNEL",
-      //           channelTypes: ["GUILD_TEXT"], 
-      //           name: "channel",
-      //           description: "The channel for reactions to be logged to",
-      //           required: true
-      //         },
-      //       ]
-      //     }
-      //   ]
-      // },
+      {
+        type: "SUB_COMMAND_GROUP",
+        name: "log_react",
+        description: "Log server reactions to a channel",
+        options: [
+          {
+            type: "SUB_COMMAND",
+            name: "clear",
+            description: "Stop logging server reactions to a channel",
+          },
+          {
+            type: "SUB_COMMAND",
+            name: "set",
+            description: "Set a channel to log server reactions to",
+            options: [
+              {
+                type: "CHANNEL",
+                channelTypes: ["GUILD_TEXT"], 
+                name: "channel",
+                description: "The channel for reactions to be logged to",
+                required: true
+              },
+            ]
+          }
+        ]
+      },
       // {
       //   type: "SUB_COMMAND_GROUP",
       //   name: "log_join",

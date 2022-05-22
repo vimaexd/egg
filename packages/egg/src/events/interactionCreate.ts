@@ -13,7 +13,7 @@ export default async (_interaction: Discord.Interaction, client: Discord.Client,
   if(_interaction.channel.type == "DM") return;
 
   try {
-    let interaction;
+    let interaction: any;
 
     switch(_interaction.type){
       case "APPLICATION_COMMAND":
@@ -24,18 +24,19 @@ export default async (_interaction: Discord.Interaction, client: Discord.Client,
         if(!cmd) return;
         if(!cmd.meta.enabled) return;
 
-        // const transaction = Sentry.startTransaction({
-        //   op: "command",
-        //   name: "Command Execution",
-        //   data: {
-        //     command: cmd.meta,
-        //     interaction
-        //   },
-        // })
+        const transaction = Sentry.startTransaction({
+          op: "command",
+          name: "Command Execution",
+          data: {
+            command: cmd.meta,
+            interaction: interaction.toJSON(),
+          },
+        })
 
-        // Sentry.configureScope(scope => {
-        //   scope.setSpan(transaction)
-        // });
+        Sentry.configureScope(scope => {
+          scope.setSpan(transaction)
+          scope.setUser({id: interaction.user.id, username: `${interaction.user.username}#${interaction.user.discriminator}`})
+        });
 
         try {
           await cmd.run(client, interaction, globals)
@@ -44,7 +45,7 @@ export default async (_interaction: Discord.Interaction, client: Discord.Client,
           handleErr(err)
         }
 
-        // transaction.finish()
+        transaction.finish()
 
         globals.log.log(`${interaction.user.username}#${interaction.user.discriminator} ran command /${cmd.meta.name}`)
         break;

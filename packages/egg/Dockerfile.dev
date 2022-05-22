@@ -1,0 +1,13 @@
+FROM node:17-alpine
+
+RUN apk add --no-cache \
+    build-base \
+    g++ \
+    cairo-dev \
+    pango-dev \
+    font-noto
+
+WORKDIR /app/packages/egg
+
+EXPOSE 9090
+CMD ["yarn", "dev"]

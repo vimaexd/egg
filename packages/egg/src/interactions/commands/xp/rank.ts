@@ -11,6 +11,8 @@ import Utils from "../../../classes/Utils";
 import { stringyId } from "../../../utils/fgstatic";
 import betaTesters from "../../../utils/betaTesters";
 import { handleErr } from "../../../utils/ErrorHandler";
+import "@sentry/tracing";
+import * as Sentry from "@sentry/node";
 
 const badgeLevels = [
   0, 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80
@@ -120,6 +122,15 @@ const Cmd = new Command({
 
   const guildProfile = await getGuild(interaction.guild)
   if(!guildProfile.xpEnabled) return interaction.reply(`XP is currently disabled`)
+
+  const transaction = Sentry.startTransaction({
+    op: "rankcardgen",
+    name: "Rank Card Generation",
+    data: {
+      interaction: interaction.toJSON()
+    },
+  })
+
   const targetProfile = await getGuildMember(target);
   const level = Xp.calculateLevel(new Big(targetProfile.xp.toString()));
 
@@ -204,7 +215,7 @@ const Cmd = new Command({
 
   // badge (48*48)
   const badgeWidth = lvlTextWidth - 12 - 48
-  const normalizedLevel = level
+  const normalizedLevel = level - 2 // idfk why it's broken either
   const closestLevel = badgeLevels
     .sort((a, b) => {
         return Math.abs(normalizedLevel - a) - Math.abs(normalizedLevel - b);
@@ -268,6 +279,7 @@ const Cmd = new Command({
 
 
   const file = new MessageAttachment(rankCard.toBuffer());
+  transaction.finish()
 
   interaction.reply({
     files: [file]

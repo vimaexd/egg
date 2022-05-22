@@ -168,8 +168,12 @@ class Loaders {
         if (f.name.split("")[0] == "_") return;
 
         try {
-          const event: { default: (args: any, client: Discord.Client, globals: YarnGlobals) => any } = await import(path.join(directory, moduleName))
-          this.client.on(moduleName, (args) => event.default(args, this.client, this.globals));
+          // { default: (args: any, client: Discord.Client, globals: YarnGlobals) => any }
+          const event: {default: (...args: any[]) => any} = await import(path.join(directory, moduleName))
+          this.client.on(moduleName, (...args) => {
+            args.push(this.client, this.globals)
+            event.default.apply(this, args)
+          });
           this.log.log(`Loaded event ${f.name}`);
         } catch (err) {
           this.log.log(`Error loading event ${f.name}!`)

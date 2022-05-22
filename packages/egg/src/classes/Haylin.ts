@@ -53,7 +53,16 @@ export default class Haylin {
         Intents.FLAGS.GUILD_MESSAGES,
         Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
         Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS
-      ] 
+      ],
+      partials: [
+        "REACTION",
+        "MESSAGE"
+      ],
+      ws: {
+        properties: {
+          $browser: "Discord iOS"
+        }
+      }
     });
 
     // Other Globals
