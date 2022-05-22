@@ -1,26 +1,27 @@
+
+export const stringyId = "577743466940071949";
+export const exylId = "455160065050148865";
+
 export const isDev = (process.env.NODE_ENV != "production")
 export const getFluteGangId = () => {
   if(isDev) return "606089486660534296"
   else return "660909173281652807"
 }
 
-export const stringyId = "577743466940071949";
-export const exylId = "455160065050148865";
+export const getAchievementEmoji = (guildId?: string) =>  {
+  let emojis: {[key: string]: string} = {};
 
-let badgeAchEasy, badgeAchHard, badgeAchImpossible;
-if(isDev) {
-  badgeAchEasy        = "971463706854715503";
-  badgeAchHard        = "971463706867294279";
-  badgeAchImpossible  = "971463707009892402";
-} else {
-  badgeAchEasy        = "977347297568497704";
-  badgeAchHard        = "977347385187504128";
-  badgeAchImpossible  = "977347427721941093";
-}
-export {
-  badgeAchEasy,
-  badgeAchHard,
-  badgeAchImpossible
+  if(guildId == getFluteGangId()) {
+    emojis["easy"]        = "977347297568497704";
+    emojis["hard"]        = "977347385187504128";
+    emojis["impossible"]  = "977347427721941093";
+  } else {
+    emojis["easy"]        = "971463706854715503";
+    emojis["hard"]        = "971463706867294279";
+    emojis["impossible"]  = "971463707009892402";
+  }
+
+  return emojis;
 }
 
 export enum PermissionGroup {

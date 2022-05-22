@@ -42,11 +42,72 @@ const Cmd = new Command({
           }
         ]
       },
+      // {
+      //   type: "SUB_COMMAND_GROUP",
+      //   name: "log_react",
+      //   description: "Log server reactions to a channel",
+      //   options: [
+      //     {
+      //       type: "SUB_COMMAND",
+      //       name: "clear",
+      //       description: "Stop logging server reactions to a channel",
+      //     },
+      //     {
+      //       type: "SUB_COMMAND",
+      //       name: "set",
+      //       description: "Set a channel to log server reactions to",
+      //       options: [
+      //         {
+      //           type: "CHANNEL",
+      //           channelTypes: ["GUILD_TEXT"], 
+      //           name: "channel",
+      //           description: "The channel for reactions to be logged to",
+      //           required: true
+      //         },
+      //       ]
+      //     }
+      //   ]
+      // },
+      // {
+      //   type: "SUB_COMMAND_GROUP",
+      //   name: "log_join",
+      //   description: "Log server joins to a channel",
+      //   options: [
+      //     {
+      //       type: "SUB_COMMAND",
+      //       name: "clear",
+      //       description: "Stop logging server joins to a channel",
+      //     },
+      //     {
+      //       type: "SUB_COMMAND",
+      //       name: "set",
+      //       description: "Set a channel to log server joins to",
+      //       options: [
+      //         {
+      //           type: "CHANNEL",
+      //           channelTypes: ["GUILD_TEXT"], 
+      //           name: "channel",
+      //           description: "The channel for joins to be logged to",
+      //           required: true
+      //         },
+      //       ]
+      //     }
+      //   ]
+      // },
     ],
 }, async (client, interaction, globals) => {
   switch(interaction.options.getSubcommandGroup()) {
     case "autoassign":
-      return subRoleCnf(interaction, "Auto assign", "role", "aaRoleId");
+      subRoleCnf(interaction, "Auto assign", "role", "aaRoleId");
+      break;
+    
+    case "log_react":
+      subRoleCnf(interaction, "Reaction log", "channel", "lgChReact");
+      break;
+
+    case "log_join":
+      subRoleCnf(interaction, "Join log", "channel", "lgChJoin");
+      break;
 
   }
 })

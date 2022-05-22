@@ -1,6 +1,6 @@
 import Big from "big.js"
 import Discord, { ButtonInteraction, Client, CommandInteraction, Constants, GuildMember, InteractionCollector, MessageEmbed } from "discord.js"
-import achievements, { DummyAchievement } from "../../../classes/Achievements"
+import achievements, { DummyAchievement, parseAchievementBadge } from "../../../classes/Achievements"
 import Command from "../../../classes/Commands/Command"
 import Utils from "../../../classes/Utils"
 import xp from "../../../classes/Xp"
@@ -22,7 +22,7 @@ const createPageContent = async (interaction: CommandInteraction, globals: YarnG
       isDummy = true;
     }
 
-    return `${interaction.client.emojis.cache.get(target.badge) || ":trophy:"} ${(isDummy) ? `\`${d.achId}\`` : `**${target.name}**`} - ${target.description}`
+    return `${parseAchievementBadge(target.badge, interaction.guild.id) || ":trophy:"} ${(isDummy) ? `\`${d.achId}\`` : `**${target.name}**`} - ${target.description}`
   })
   mappedDesc = await Promise.all(mappedDesc);
 

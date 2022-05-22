@@ -5,7 +5,7 @@ import { Haylin as Haylin } from '../../../index';
 
 type TSingularConfigType = "role" | "channel"
 
-export default async (interaction: CommandInteraction, roleText: string, type: TSingularConfigType, dbKey: string) => {
+export default async (interaction: CommandInteraction, settingText: string, type: TSingularConfigType, dbKey: string) => {
   switch(interaction.options.getSubcommand()) {
     case "clear":
       await Haylin.globals.db.guild.updateMany({
@@ -16,21 +16,23 @@ export default async (interaction: CommandInteraction, roleText: string, type: T
           [dbKey]: ""
         }
       })
-      interaction.reply(`:white_check_mark: ${roleText} ${type} has been removed`)
+      interaction.reply(`:white_check_mark: ${settingText} ${type} has been removed`)
       break;
 
     case "set":
-      let target: Role | GuildBasedChannel;
+      let target: any;
 
       switch(type) {
         case "role":
-          target = interaction.options.getRole('role') as Role;
+          target = interaction.options.getRole('role');
           break;
     
         case "channel":
-          target = interaction.options.getChannel('channel') as GuildBasedChannel;
+          target = interaction.options.getChannel('channel');
           break;
       }
+
+      if(!target.id) interaction.reply("Error: Invalid channel ID found, please try again later");
 
       await Haylin.globals.db.guild.updateMany({
         where: {
@@ -40,6 +42,7 @@ export default async (interaction: CommandInteraction, roleText: string, type: T
           [dbKey]: target.id
         }
       })
-      interaction.reply(`:white_check_mark: ${roleText} ${type} has been set to ` + Formatters.bold(target.name))
+      interaction.reply(`:white_check_mark: ${settingText} ${type} has been set to ` + Formatters.bold(target.name))
+      break;
   }
 }

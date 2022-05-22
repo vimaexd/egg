@@ -1,6 +1,6 @@
 import { GuildMember, MessageEmbed } from "discord.js";
 import { Haylin as Haylin } from "..";
-import achievements, { DummyAchievement } from "../classes/Achievements";
+import achievements, { DummyAchievement, parseAchievementBadge } from "../classes/Achievements";
 import { handleErr } from "../utils/ErrorHandler";
 import Log from "./Log";
 
@@ -36,7 +36,7 @@ achievements.events.on('achievementGet', async (member: GuildMember, achievement
   await notifications.send(
     member, 
     `:trophy: Achievement unlocked!`, 
-    `${member.client.emojis.cache.get(targetAch.badge) || ":crown:"} **${targetAch.name}**
+    `${parseAchievementBadge(targetAch.badge, member.guild.id) || ":crown:"} **${targetAch.name}**
     *${targetAch.description}*
     `
   )

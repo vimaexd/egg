@@ -3,7 +3,7 @@ import { GuildMember as DiscordGuildMember, Message } from "discord.js";
 import EventEmitter from "events";
 import { Haylin as Haylin } from "..";
 import getGuildMember, { GuildMemberExtras } from '../db/utils/getGuildMember';
-import { badgeAchEasy, badgeAchHard, badgeAchImpossible, exylId } from "../utils/fgstatic";
+import { getAchievementEmoji, exylId } from "../utils/fgstatic";
 import Log from "./Log";
 import xp from "./Xp";
 
@@ -36,6 +36,15 @@ const DummyAchievement: IAchievement<AchievementEvent> = {
   badge: ":grey_question:",
   check: () => { return new Promise(r => r(false)) },
 }
+
+const parseAchievementBadge = (badge: string, guildId?: string) => {
+  if(badge.startsWith("ach:")) {
+    const achievementBadgeEmojis = getAchievementEmoji(guildId);
+    badge = achievementBadgeEmojis[badge.split(":")[1]];
+  }
+
+  return Haylin.client.emojis.cache.get(badge);
+};
 
 class Achievements {
   private log: Log
@@ -134,6 +143,7 @@ class Achievements {
     this.data.push(ach);
   }
 }
+
 const achievements = new Achievements()
 
 achievements.register({
@@ -141,7 +151,7 @@ achievements.register({
   name: "The Legendary Message",
   description: "Obtain all bot emoji reactions on one message",
   eventType: AchievementEvent.NONE,
-  badge: badgeAchEasy,
+  badge: "ach:easy",
   async check(member: DiscordGuildMember) { return false }
 })
 
@@ -150,7 +160,7 @@ achievements.register({
   name: "The Grind",
   description: "Gain 9000XP in under 3 hours",
   eventType: AchievementEvent.XPGAIN,
-  badge: badgeAchImpossible,
+  badge: "ach:impossible",
   async check(member: DiscordGuildMember) { 
     if(!(member.guild.id in xp.activityCache)) return;
     if(!(member.user.id in xp.activityCache[member.guild.id])) return;
@@ -171,7 +181,7 @@ achievements.register({
   name: "Ghosted",
   description: "Participate in a ratio battle where nobody votes",
   eventType: AchievementEvent.NONE,
-  badge: badgeAchEasy,
+  badge: "ach:easy",
   async check(member: DiscordGuildMember) { return false }
 })
 
@@ -180,7 +190,7 @@ achievements.register({
   name: "Twitter User",
   description: "Win ratio battles against 5 different people",
   eventType: AchievementEvent.RATIO,
-  badge: badgeAchEasy,
+  badge: "ach:easy",
   async check(member: DiscordGuildMember) { 
     const group = await Haylin.globals.db.ratioBattleResult.groupBy({
       by: ["loserId"],
@@ -199,7 +209,7 @@ achievements.register({
   name: "No way",
   description: "Ratio Exyl",
   eventType: AchievementEvent.RATIO,
-  badge: badgeAchImpossible,
+  badge: "ach:impossible",
   async check(member: DiscordGuildMember) {
     const data = await Haylin.globals.db.ratioBattleResult.count({
       where: {
@@ -218,7 +228,7 @@ achievements.register({
   id: "eggbot:fc",
   name: "Full Combo",
   description: "Reach the maximum XP combo",
-  badge: badgeAchEasy,
+  badge: "ach:easy",
   eventType: AchievementEvent.XPGAIN,
   async check(member: DiscordGuildMember) {
     return (xp.getRecentActivity(member.guild.id, member.user.id) == 5)
@@ -230,7 +240,7 @@ achievements.register({
   name: "Alive Chat",
   description: "Break the chat's silence after it being silent for atleast 20 minutes",
   eventType: AchievementEvent.NONE,
-  badge: badgeAchHard,
+  badge: "ach:hard",
   async check(member: DiscordGuildMember) { return false }
 })
 
@@ -238,7 +248,7 @@ achievements.register({
   id: "eggbot:happyday",
   name: "Happy Day",
   description: "Get 5 XP boost rewards in one day",
-  badge: badgeAchHard,
+  badge: "ach:hard",
   eventType: AchievementEvent.XPGAIN,
   async check(member: DiscordGuildMember) {
     const prefs = await xp.getGuildPrefs(member.guild);
@@ -261,5 +271,6 @@ achievements.register({
 export default achievements;
 export {
   AchievementEvent,
-  DummyAchievement
+  DummyAchievement,
+  parseAchievementBadge
 }
