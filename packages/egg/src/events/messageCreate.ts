@@ -8,6 +8,7 @@ import xp from "../classes/Xp";
 import achievements from "../classes/Achievements";
 import getGuildMember from "../db/utils/getGuildMember";
 import dayjs from "dayjs";
+import { handleErr } from "../utils/ErrorHandler";
 
 let lastMessage: Discord.Message;
 
@@ -20,12 +21,10 @@ export default async (message: Discord.Message, client: Discord.Client, globals:
       if(new RegExp(k).test(message.content.toLowerCase())){
         const guild = await getGuild(message.guild);
         if(!guild.rwEnabled) return;
-        if(!message.react)
         try {
           await message.react(reactionWords[k]);
         } catch(err) {
-          console.log("reaction failed - " + err)
-          // failed to react :(
+          handleErr(err)
         }
       }
     })
