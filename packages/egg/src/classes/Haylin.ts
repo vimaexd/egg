@@ -29,7 +29,8 @@ export default class Haylin {
         environment: process.env.NODE_ENV,
         integrations: [
           new Sentry.Integrations.Console(),
-        ]
+        ],
+        debug: true
       });
       this.globals.log.log("Sentry enabled")
     }
