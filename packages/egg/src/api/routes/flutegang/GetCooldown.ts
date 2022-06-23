@@ -1,9 +1,9 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { getFluteGangId } from "../../../utils/fgstatic";
-import { lastRatioTimestamp } from '../../../utils/ratio';
+import { getFluteGangId } from "../../../static/fluteGang";
+import { ratioBattles } from '../../../classes/features/RatioBattles';
 
 export default async (req: FastifyRequest, reply: FastifyReply) => {
   return {
-    expires: lastRatioTimestamp.get(getFluteGangId()) || 0
+    expires: ratioBattles.recentTimestamp.get(getFluteGangId()) || 0
   };
 }

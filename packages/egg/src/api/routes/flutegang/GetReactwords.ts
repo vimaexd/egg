@@ -1,9 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { getFluteGangId } from "../../../utils/fgstatic";
-import { lastRatioTimestamp } from '../../../utils/ratio';
-import reactionWords from "../../../utils/reactwords";
+import { wordBank } from "../../../classes/features/ReactionWords";
 
-const emotes = Object.values(reactionWords);
+const emotes = Object.values(wordBank);
 
 export default async (req: FastifyRequest, reply: FastifyReply) => {
   return {

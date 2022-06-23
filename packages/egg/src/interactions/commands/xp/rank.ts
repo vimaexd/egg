@@ -1,15 +1,15 @@
 import axios from "axios";
 import path from 'path';
 import Discord, { ButtonInteraction, Constants, GuildMember, MessageAttachment, MessageEmbed, Util } from "discord.js"
-import Command from "../../../classes/Commands/Command"
+import Command from "../../../classes/commands/Command"
 import { createCanvas, registerFont, Image, Canvas, loadImage } from 'canvas';
 import getGuildMember from "../../../db/utils/getGuildMember";
-import Xp from '../../../classes/Xp';
+import Xp from '../../../classes/features/Xp';
 import Big from "big.js";
 import getGuild from "../../../db/utils/getGuild";
 import Utils from "../../../classes/Utils";
-import { stringyId } from "../../../utils/fgstatic";
-import betaTesters from "../../../utils/betaTesters";
+import { stringyId } from "../../../static/fluteGang";
+import betaTesters from "../../../static/betaTesters";
 import { handleErr } from "../../../utils/ErrorHandler";
 import "@sentry/tracing";
 import * as Sentry from "@sentry/node";

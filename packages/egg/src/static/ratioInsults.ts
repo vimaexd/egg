@@ -6,7 +6,6 @@ export default [
   "Genshinner",
   "Take a shower",
   "💀",
-  "Das why yo momma ded",
   "Ratio^2",
   "L",
   "Seethe",

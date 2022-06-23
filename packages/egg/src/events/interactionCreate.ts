@@ -3,8 +3,8 @@ import Discord, { AutocompleteInteraction, ButtonInteraction, CommandInteraction
 import "@sentry/tracing";
 import * as Sentry from "@sentry/node";
 
-import Command from "../classes/Commands/Command"
-import { YarnGlobals } from "../utils/types";
+import Command from "../classes/commands/Command"
+import { YarnGlobals } from "../utils/types.bot";
 
 import BtnRolemenuHandler from '../interactions/buttons/rolemenu';
 import { handleErr } from "../utils/ErrorHandler";

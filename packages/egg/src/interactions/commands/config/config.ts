@@ -1,8 +1,8 @@
 import Discord, { ButtonInteraction, Constants, Formatters, GuildMember, MessageEmbed } from "discord.js"
-import Command from "../../../classes/Commands/Command"
+import Command from "../../../classes/commands/Command"
 import Utils from "../../../classes/Utils";
-import xp from "../../../classes/Xp";
-import { YarnGlobals } from "../../../utils/types";
+import xp from "../../../classes/features/Xp";
+import { YarnGlobals } from "../../../utils/types.bot";
 import getGuildMember from "../../../db/utils/getGuildMember";
 import YesNoCollector from "../../../utils/YesNoCollector";
 import { handleErr } from "../../../utils/ErrorHandler";

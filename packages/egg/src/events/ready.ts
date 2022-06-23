@@ -1,5 +1,5 @@
 import Discord from "discord.js";
-import { YarnGlobals } from "../utils/types";
+import { YarnGlobals } from "../utils/types.bot";
 
 // there are 2 clients because we provide our own
 // should probably refactor this at some point

@@ -1,11 +1,11 @@
 import dayjs from "dayjs";
 import { GuildMember as DiscordGuildMember, Message } from "discord.js";
 import EventEmitter from "events";
-import { Haylin as Haylin } from "..";
-import getGuildMember, { GuildMemberExtras } from '../db/utils/getGuildMember';
-import { getAchievementEmoji, exylId } from "../utils/fgstatic";
+import { Haylin as Haylin } from "../..";
+import getGuildMember, { GuildMemberExtras } from '../../db/utils/getGuildMember';
+import { getAchievementEmoji, exylId } from "../../static/fluteGang";
 import Log from "./Log";
-import xp from "./Xp";
+import xp from "../features/Xp";
 
 interface IAchievement<T> {
   id: string;

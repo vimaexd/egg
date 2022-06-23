@@ -1,7 +1,7 @@
 import Discord, { AutocompleteInteraction, CommandInteraction, GuildMember, Interaction, User } from "discord.js"
-import { YarnGlobals } from "../../utils/types"
+import { YarnGlobals } from "../../utils/types.bot"
 
-import { getPermissionRoles, PermissionGroup } from "../../utils/fgstatic";
+import { getPermissionRoles, PermissionGroup } from "../../static/fluteGang";
 const PermissionRoles = getPermissionRoles();
 
 export interface CommandMeta {

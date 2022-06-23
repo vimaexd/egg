@@ -1,11 +1,11 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as Discord from "discord.js";
-import { YarnGlobals } from "../utils/types"
-import Command from "./Commands/Command";
+import { YarnGlobals } from "../../utils/types.bot"
+import Command from "../commands/Command";
 import Log from "./Log";
-import { getFluteGangId, getPermissionRoles } from "../utils/fgstatic";
-import { handleErr } from "../utils/ErrorHandler";
+import { getFluteGangId, getPermissionRoles } from "../../static/fluteGang";
+import { handleErr } from "../../utils/ErrorHandler";
 
 /**
  * @classdesc Command & event loader for Yarn

@@ -1,8 +1,7 @@
 import { PrismaClient } from "@prisma/client";
-import Command from "../classes/Commands/Command"
-import Loaders from "../classes/Loaders";
-import Log from "../classes/Log";
-import Notifications from "../classes/Notifications";
+import Command from "../classes/commands/Command"
+import Log from "../classes/system/Log";
+import Notifications from "../classes/system/Notifications";
 
 export interface YarnGlobals {
   prefix?: string;

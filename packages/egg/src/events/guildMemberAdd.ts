@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 import Discord, { DiscordAPIError, TextChannel } from "discord.js";
 import getGuild from "../db/utils/getGuild";
-import { YarnGlobals } from "../utils/types";
+import { YarnGlobals } from "../utils/types.bot";
 
 export default async (member: Discord.GuildMember, client: Discord.Client, globals: YarnGlobals) => {
   const g = await getGuild(member.guild)

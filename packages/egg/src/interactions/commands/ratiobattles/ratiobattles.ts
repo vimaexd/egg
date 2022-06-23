@@ -1,11 +1,8 @@
-import axios from "axios";
 import Discord, { ButtonInteraction, Constants, GuildMember, MessageEmbed } from "discord.js"
-import Command from "../../../classes/Commands/Command"
-import dayjs from "dayjs";
+import Command from "../../../classes/commands/Command"
 import getGuild from "../../../db/utils/getGuild";
-import { deleteBtn, noBtn } from "../../../utils/buttons";
-import { lastRatioTimestamp, ratioCooldown } from "../../../utils/ratio";
-import { PermissionGroup } from "../../../utils/fgstatic";
+import { deleteBtn, noBtn } from "../../../static/buttons";
+import { ratioBattles, ratioCooldown } from "../../../classes/features/RatioBattles";
 
 const Cmd = new Command({
     enabled: true,
@@ -54,12 +51,12 @@ const Cmd = new Command({
       break;
     case "view":
       if(
-        !lastRatioTimestamp.get(interaction.guild.id) 
-        || interaction.createdTimestamp - lastRatioTimestamp.get(interaction.guild.id) > ratioCooldown
+        !ratioBattles.recentTimestamp.get(interaction.guild.id) 
+        || interaction.createdTimestamp - ratioBattles.recentTimestamp.get(interaction.guild.id) > ratioCooldown
       ) {
         return interaction.reply(`✅ The ratio cooldown has expired! Waiting on a Ratio Battle message...`)
       } else {
-        const cooldownUnixSec = Math.floor((lastRatioTimestamp.get(interaction.guild.id) + ratioCooldown) / 1000)
+        const cooldownUnixSec = Math.floor((ratioBattles.recentTimestamp.get(interaction.guild.id) + ratioCooldown) / 1000)
         interaction.reply(`🕒 The ratio cooldown expires <t:${cooldownUnixSec}:R> (<t:${cooldownUnixSec}>)`)
       }
       break;
@@ -80,7 +77,7 @@ const Cmd = new Command({
             break;
           
           case "yes":
-            lastRatioTimestamp.set(interaction.guild.id, 0)
+            ratioBattles.recentTimestamp.set(interaction.guild.id, 0)
             btnInteraction.update({ 
               content: `:white_check_mark: The cooldown has been reset.`, 
               components: []

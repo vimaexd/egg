@@ -1,15 +1,16 @@
 import { Guild, Message } from 'discord.js';
-import getGuild from '../db/utils/getGuild';
-import getGuildMember from '../db/utils/getGuildMember';
+import getGuild from '../../db/utils/getGuild';
+import getGuildMember from '../../db/utils/getGuildMember';
 import dayjs from 'dayjs';
-import { Haylin as Haylin } from '../index'; 
+import { Haylin as Haylin } from '../../index'; 
 import Big from 'big.js';
 import { GuildXPBlacklistedChannel, GuildXPRoleReward } from '@prisma/client';
-import Log from './Log';
-import achievements, { AchievementEvent } from './Achievements';
+import Log from '../system/Log';
+import achievements, { AchievementEvent } from '../system/Achievements';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import path from 'path';
-import { handleErr } from '../utils/ErrorHandler';
+import { handleErr } from '../../utils/ErrorHandler';
+import { IGuildStore, IGuildUserStore } from '../../utils/types.store';
 
 const log = new Log({ prefix: "XP" })
 
@@ -18,17 +19,6 @@ const getProperty = (obj: any, key: any) => {
   if(!obj.hasOwnProperty(key)) return undefined;
   else return obj[key];
 }
-
-interface IGuildStore<T> {
-  [guildId: string]: T;
-}
-
-interface IGuildUserStore<T> {
-  [guildId: string]: {
-    [userId: string]: T;
-  }
-}
-
 interface IXpChangeCache {
   time: number
   amount: number

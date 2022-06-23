@@ -1,7 +1,7 @@
 import { GuildMember, MessageEmbed } from "discord.js";
-import { Haylin as Haylin } from "..";
-import achievements, { DummyAchievement, parseAchievementBadge } from "../classes/Achievements";
-import { handleErr } from "../utils/ErrorHandler";
+import { Haylin as Haylin } from "../..";
+import achievements, { DummyAchievement, parseAchievementBadge } from "./Achievements";
+import { handleErr } from "../../utils/ErrorHandler";
 import Log from "./Log";
 
 class Notifications {

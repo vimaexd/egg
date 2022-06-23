@@ -1,5 +1,5 @@
 import { default as Fastify, FastifyReply, FastifyRequest } from 'fastify';
-import Log from '../classes/Log';
+import Log from '../classes/system/Log';
 
 const log = new Log({prefix: "API"})
 

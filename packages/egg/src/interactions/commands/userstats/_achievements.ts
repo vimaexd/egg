@@ -1,11 +1,11 @@
 import Big from "big.js"
 import Discord, { ButtonInteraction, Client, CommandInteraction, Constants, GuildMember, InteractionCollector, MessageEmbed } from "discord.js"
-import achievements, { DummyAchievement, parseAchievementBadge } from "../../../classes/Achievements"
-import Command from "../../../classes/Commands/Command"
+import achievements, { DummyAchievement, parseAchievementBadge } from "../../../classes/system/Achievements"
+import Command from "../../../classes/commands/Command"
 import Utils from "../../../classes/Utils"
-import xp from "../../../classes/Xp"
+import xp from "../../../classes/features/Xp"
 import getGuildMember, { GuildMemberExtras } from "../../../db/utils/getGuildMember"
-import { YarnGlobals } from "../../../utils/types"
+import { YarnGlobals } from "../../../utils/types.bot"
 
 const utils = new Utils()
 const createPageContent = async (interaction: CommandInteraction, globals: YarnGlobals, page: number, profile: GuildMemberExtras): Promise<any> => {

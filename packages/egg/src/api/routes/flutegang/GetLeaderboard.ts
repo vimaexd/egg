@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest, FastifySchema } from "fastify";
 import { Haylin as Haylin } from '../../../index';
-import { getFluteGangId } from "../../../utils/fgstatic";
+import { getFluteGangId } from "../../../static/fluteGang";
 
 const { globals, client } = Haylin;
 

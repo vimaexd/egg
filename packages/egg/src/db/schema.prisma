@@ -48,6 +48,10 @@ model Guild {
   // REACTION WORDS
   rwEnabled       Boolean               @default(false)
 
+  // REACTION WORDS: DAD JOKE
+  // DEPRECATED
+  rwDjEnabled     Boolean               @default(false)
+
   // XP
   xpEnabled       Boolean               @default(false)
   xpMinChar       Int                   @default(0)

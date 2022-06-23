@@ -5,10 +5,10 @@ import * as Sentry from '@sentry/node';
 import * as Tracing from '@sentry/tracing';
 import { PrismaClient } from '@prisma/client'
 
-import { YarnGlobals, YarnShardMessage } from "../utils/types"
-import Loaders from "./Loaders";
-import Log from "./Log";
-import notifications from "./Notifications";
+import { YarnGlobals, YarnShardMessage } from "../utils/types.bot"
+import Loaders from "./system/Loaders";
+import Log from "./system/Log";
+import notifications from "./system/Notifications";
 
 
 export default class Haylin {

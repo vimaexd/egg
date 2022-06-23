@@ -1,6 +1,6 @@
 import Discord, { ButtonInteraction } from "discord.js";
 import getGuild from "../../db/utils/getGuild";
-import { YarnGlobals } from "../../utils/types";
+import { YarnGlobals } from "../../utils/types.bot";
 
 import { generateButtons, generateRows, generateMessage } from '../commands/rolemenu/_generateButtons';
 

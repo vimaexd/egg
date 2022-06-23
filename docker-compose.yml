@@ -11,7 +11,7 @@ services:
     ports:
       - ${API_PORT}:9090
     volumes:
-      - ./data/bot:/app/data
+      - ./config:/app/config
 
   db:
     image: postgres

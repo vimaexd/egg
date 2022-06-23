@@ -1,10 +1,10 @@
-import Command from "../../../classes/Commands/Command"
+import Command from "../../../classes/commands/Command"
 import Discord, { Client, CommandInteraction, MessageEmbed } from 'discord.js';
 import getGuildMember from "../../../db/utils/getGuildMember";
-import xp from "../../../classes/Xp";
+import xp from "../../../classes/features/Xp";
 import Big from "big.js";
 import _ from 'lodash';
-import { YarnGlobals } from "../../../utils/types";
+import { YarnGlobals } from "../../../utils/types.bot";
 
 import subCmdAchievements from './_achievements';
 import { handleErr } from "../../../utils/ErrorHandler";

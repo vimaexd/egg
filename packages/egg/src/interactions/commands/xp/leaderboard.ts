@@ -1,9 +1,9 @@
 import Big from "big.js"
 import Discord, { ButtonInteraction, CommandInteraction, Constants, GuildMember, InteractionCollector, MessageEmbed } from "discord.js"
-import Command from "../../../classes/Commands/Command"
+import Command from "../../../classes/commands/Command"
 import Utils from "../../../classes/Utils"
-import xp from "../../../classes/Xp"
-import { YarnGlobals } from "../../../utils/types"
+import xp from "../../../classes/features/Xp"
+import { YarnGlobals } from "../../../utils/types.bot"
 
 const utils = new Utils()
 const createPageContent = async (interaction: CommandInteraction, globals: YarnGlobals, page: number): Promise<any> => {

@@ -1,11 +1,11 @@
 import axios from "axios";
 import Discord, { ButtonInteraction, GuildMember, MessageEmbed } from "discord.js"
-import Command from "../../../classes/Commands/Command"
+import Command from "../../../classes/commands/Command"
 import dayjs from "dayjs";
 import getGuild from "../../../db/utils/getGuild";
-import { PermissionGroup } from "../../../utils/fgstatic";
+import { PermissionGroup } from "../../../static/fluteGang";
 
-import { noBtn, deleteBtn } from '../../../utils/buttons';
+import { noBtn, deleteBtn } from '../../../static/buttons';
 import { generateButtons, generateMessage, generateRows} from './_generateButtons';
 
 const Cmd = new Command({

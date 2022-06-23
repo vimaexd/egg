@@ -1,5 +1,5 @@
 import { ButtonInteraction, CommandInteraction, InteractionCollector, MessageActionRow } from "discord.js";
-import { deleteBtn, noBtn } from "./buttons";
+import { deleteBtn, noBtn } from "../static/buttons";
 
 interface IYesNoCollectorOptions {
   interaction: CommandInteraction;

@@ -1,5 +1,5 @@
 import { Channel, CommandInteraction, Formatters, GuildBasedChannel, Role } from "discord.js";
-import { YarnGlobals } from "../../../utils/types";
+import { YarnGlobals } from "../../../utils/types.bot";
 
 import { Haylin as Haylin } from '../../../index';
 
