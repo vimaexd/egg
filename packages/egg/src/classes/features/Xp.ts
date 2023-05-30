@@ -6,7 +6,6 @@ import { Haylin as Haylin } from '../../index';
 import Big from 'big.js';
 import { GuildXPBlacklistedChannel, GuildXPRoleReward } from '@prisma/client';
 import Log from '../system/Log';
-import achievements, { AchievementEvent } from '../system/Achievements';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import path from 'path';
 import { handleErr } from '../../utils/ErrorHandler';
@@ -359,8 +358,6 @@ class XP {
         }
       }
     }
-
-    await achievements.updateFilteredByEvent(message.member, AchievementEvent.XPGAIN);
   }
 }
 

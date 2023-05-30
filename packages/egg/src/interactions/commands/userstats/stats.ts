@@ -6,7 +6,6 @@ import Big from "big.js";
 import _ from 'lodash';
 import { YarnGlobals } from "../../../utils/types.bot";
 
-import subCmdAchievements from './_achievements';
 import { handleErr } from "../../../utils/ErrorHandler";
 const subCmdStats = async (client: Client, interaction: CommandInteraction, globals: YarnGlobals) => {
   const _target = interaction.options.getUser("user") || interaction.user
@@ -80,25 +79,14 @@ const Cmd = new Command({
           description: "The user you would like to see info of",
           required: false
         }]
-      },
-      {
-        type: "SUB_COMMAND",
-        name: "achievements",
-        description: "View a user's achievements",
-        options: [{
-          name: "user",
-          type: Discord.Constants.ApplicationCommandOptionTypes.USER,
-          description: "The user you would like to see achievements of",
-          required: false
-        }]
       }
     ]
 }, async (...args) => {
   const interaction = args[1];
   switch(interaction.options.getSubcommand()){
-    case "achievements":
-      subCmdAchievements(...args)
-      break;
+    // case "achievements":
+    //   subCmdAchievements(...args)
+    //   break;
     default:
       subCmdStats(...args)
       break;

@@ -1,6 +1,5 @@
 import { GuildMember, MessageEmbed } from "discord.js";
 import { Haylin as Haylin } from "../..";
-import achievements, { DummyAchievement, parseAchievementBadge } from "./Achievements";
 import { handleErr } from "../../utils/ErrorHandler";
 import Log from "./Log";
 
@@ -28,18 +27,5 @@ class Notifications {
   }
 }
 const notifications = new Notifications();
-
-achievements.events.on('achievementGet', async (member: GuildMember, achievementId) => {
-  let targetAch = achievements.data.find((a) => a.id == achievementId);
-  if(!targetAch) targetAch = DummyAchievement;
-
-  await notifications.send(
-    member, 
-    `:trophy: Achievement unlocked!`, 
-    `${parseAchievementBadge(targetAch.badge, member.guild.id) || ":crown:"} **${targetAch.name}**
-    *${targetAch.description}*
-    `
-  )
-})
 
 export default notifications
