@@ -1,4 +1,0 @@
-services:
-  bot:
-    environment:
-      - NODE_ENV=production
