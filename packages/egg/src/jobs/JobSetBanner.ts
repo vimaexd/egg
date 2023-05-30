@@ -26,7 +26,7 @@ const updateBannerForGuild = async (guildProfile: any) => {
 
   // select a random image and set it as the banner of the Discord Guild
   const randomImage = images[Math.floor(Math.random() * images.length)];
-  const guild = Haylin.client.guilds.cache.get(guildProfile.guildId);
+  const guild = await Haylin.client.guilds.fetch(guildProfile.guildId);
 
   try {
     await guild.setBanner(randomImage, `Randomly from Imgur album: https://imgur.com/a/${guildProfile.bannerAlbumId}`)
