@@ -91,7 +91,7 @@ class Loaders {
 
       // push commands
       if (this.globals.env === "development") {
-        const devsrv = await this.client.guilds.fetch(this.globals.config.serverId)
+        const devsrv = await this.client.guilds.fetch(process.env.DEV_SERVER_ID)
         await devsrv.commands.set(data.concat(dev_data));
         await this.client.application?.commands.set([]);
       } else {
