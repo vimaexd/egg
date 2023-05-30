@@ -15,7 +15,7 @@ export default () => {
   })
 
   app.all('/', async (req, reply) => { return "uwu" })
-  app.register(import('./routes/flutegang/manager'), { prefix: '/v1/flutegang'})
+  // app.register(import('./routes/flutegang/manager'), { prefix: '/v1/flutegang'})
 
   app.listen(9090, "0.0.0.0", (err, addr) => {
     if(err) throw err;

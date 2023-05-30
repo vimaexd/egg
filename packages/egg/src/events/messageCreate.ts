@@ -13,7 +13,6 @@ export default async (message: Discord.Message, client: Discord.Client, globals:
   if(message.partial) return;
   
   reactionWords.runReactionWords(message);
-  // ratioBattles.runRatio(message, client, globals);
 
   xp.runXp(message);
 }
