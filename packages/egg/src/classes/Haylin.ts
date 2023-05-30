@@ -37,12 +37,6 @@ export default class Haylin {
 
     this.globals.commands = new Map;
     this.globals.aliases = new Map;
-    this.globals.config = JSON.parse(
-      fs.readFileSync(
-        path.join(process.cwd(), '..', '..', 'config', 'conf.json'), 
-        { encoding: 'utf-8' }
-      )
-    ) as any;
 
     // Environment
     (process.env.NODE_ENV === "production") ? this.globals.env = "production" : this.globals.env = "development";
