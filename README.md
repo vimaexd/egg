@@ -1,6 +1,5 @@
-![Haylin](https://i.imgur.com/1QQVAcN.gif)
 
-A customized version of [etstringy/yarn](https://github.com/etstringy/yarn) for the Flute Gang discord server.
+A customized version of [etstringy/yarn](https://github.com/etstringy/yarn) for the Dalux Galaxy discord server.
 
 ## Packages
 | Package Name  | Description 

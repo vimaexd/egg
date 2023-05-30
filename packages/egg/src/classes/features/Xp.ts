@@ -40,7 +40,7 @@ class XP {
     this.lastMsgStore = {};
     this.activityCache = {};
 
-    this.activityFile = path.join(__dirname, '../../../../data/bot/activityCache.json');
+    this.activityFile = path.join(__dirname, '../../../../../data/bot/activityCache.json');
     if(!existsSync(this.activityFile)){
       mkdirSync(path.dirname(this.activityFile), { recursive: true })
       writeFileSync(this.activityFile, JSON.stringify({}), { encoding: "utf-8" });

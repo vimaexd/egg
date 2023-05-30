@@ -105,7 +105,7 @@ export default class Haylin {
 
     this.client.user.setPresence({
       "activities": [
-        {"type": "LISTENING", "name": `Ping! 2`},
+        {"type": "WATCHING", "name": `Dalux News 3`},
       ]
     })
     this.globals.log.log("Initialization complete");

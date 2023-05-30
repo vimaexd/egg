@@ -18,27 +18,19 @@ const badgeLevels = [
   0, 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80
 ]
 
-registerFont(
-  path.join(__dirname, "../../../../assets/fonts/ComicSans.ttf"), 
-  {
-    family: "Comic Sans",
-    weight: "400",
-  }
-)
-
 
 registerFont(
-  path.join(__dirname, "../../../../assets/fonts/Montserrat-Regular.ttf"), 
+  path.join(__dirname, "../../../../assets/fonts/Metropolis-Regular.otf"), 
   {
-    family: "Montserrat",
+    family: "Metropolis",
     weight: "400",
   }
 )
 
 registerFont(
-  path.join(__dirname, "../../../../assets/fonts/Montserrat-ExtraBold.ttf"), 
+  path.join(__dirname, "../../../../assets/fonts/Metropolis-ExtraBold.otf"), 
   {
-    family: "Montserrat",
+    family: "Metropolis",
     weight: "800",
   }
 )
@@ -139,20 +131,17 @@ const Cmd = new Command({
   const rankCard = createCanvas(1000, 210);
   const ctx = rankCard.getContext('2d');
 
-  let fontFamily = "Montserrat";
-  if(target.id == stringyId) {
-    fontFamily = "Comic Sans";
-  }
+  let fontFamily = "Metropolis";
 
   // bg
-  ctx.fillStyle = "#000"
+  ctx.fillStyle = "#0f0f0f"
   roundRect(ctx, 0, 0, 1000, 210, 8, true)
 
   // pfp
   let pfpSrc = target.displayAvatarURL({ size: 64, format: "png" });
-  if(target.id == stringyId) {
-    pfpSrc = path.join(__dirname, "../../../../assets/misc/sweeney.png");
-  }
+  // if(target.id == stringyId) {
+  //   pfpSrc = path.join(__dirname, "../../../../assets/misc/sweeney.png");
+  // }
   const pfp = await loadImage(pfpSrc)
   ctx.drawImage(roundPfp(pfp), 32, 32, 64, 64)
   
@@ -214,19 +203,22 @@ const Cmd = new Command({
   ctx.fillText("LVL", lvlTextWidth, usernameY)
 
   // badge (48*48)
+  // const badgeWidth = lvlTextWidth - 12 - 48
+  // const normalizedLevel = level - 2 // idfk why it's broken either
+  // const closestLevel = badgeLevels
+  //   .sort((a, b) => {
+  //       return Math.abs(normalizedLevel - a) - Math.abs(normalizedLevel - b);
+  //   })
+  //   [0]
+
+  // if(closestLevel != 0) {
+  //   const badge = await loadImage(path.join(__dirname, `../../../../assets/level_badges/LVL_${closestLevel}.png`))
+  //   ctx.drawImage(badge, badgeWidth, usernameY - 48 + 5, 48, 48)
+  // }
+
+  const badge = await loadImage(path.join(__dirname, `../../../../assets/blob.png`))
   const badgeWidth = lvlTextWidth - 12 - 48
-  const normalizedLevel = level - 2 // idfk why it's broken either
-  const closestLevel = badgeLevels
-    .sort((a, b) => {
-        return Math.abs(normalizedLevel - a) - Math.abs(normalizedLevel - b);
-    })
-    [0]
-
-  if(closestLevel != 0) {
-    const badge = await loadImage(path.join(__dirname, `../../../../assets/level_badges/LVL_${closestLevel}.png`))
-    ctx.drawImage(badge, badgeWidth, usernameY - 48 + 5, 48, 48)
-  }
-
+  ctx.drawImage(badge, badgeWidth, usernameY - 48 + 5, 48, 48)
   
   // base bar
   ctx.fillStyle = "#242424"
@@ -244,10 +236,15 @@ const Cmd = new Command({
   
   const filledBarWidth = xpPercent * 935
 
-  const exylGradient = ctx.createLinearGradient(0, 0, filledBarWidth, 0);
-  exylGradient.addColorStop(0, "#FF5B03")
-  exylGradient.addColorStop(1, "#FF0B17")
-  ctx.fillStyle = exylGradient
+  const gradient = ctx.createLinearGradient(0, 0, filledBarWidth, 0);
+
+  gradient.addColorStop(1, "#f5a5d5")
+  gradient.addColorStop(0.63, "#f38db8")
+  gradient.addColorStop(0.36, "#f37b83")
+  gradient.addColorStop(0.17, "#f7855f")
+  gradient.addColorStop(0, "#da6943")
+
+  ctx.fillStyle = gradient
   roundRect(ctx, 32, rankCard.height - 100, filledBarWidth, 64, 40, true)
   
   // XP amount

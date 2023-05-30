@@ -7,7 +7,8 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "dev": "yarn && yarn builddb && ts-node src/index.ts",
+    "ci": "yarn && yarn builddb && ts-node src/index.ts",
+    "dev": "ts-node src/index.ts",
     "start": "yarn builddb && node ./dist/index",
     "builddb": "yarn prisma generate && yarn prisma migrate deploy",
     "build": "tsc"

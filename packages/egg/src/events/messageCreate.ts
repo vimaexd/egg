@@ -16,8 +16,7 @@ export default async (message: Discord.Message, client: Discord.Client, globals:
   if(message.partial) return;
   
   reactionWords.runReactionWords(message);
-  // reactionWords.runDadJoke(message);
-  ratioBattles.runRatio(message, client, globals);
+  // ratioBattles.runRatio(message, client, globals);
 
   // Reactall Achievement
   const matchedAll = !Object.keys(wordBank).some((k) => !(new RegExp(k).test(message.content.toLowerCase())));

@@ -5,12 +5,11 @@ import initializeApi from './api/Api';
 
 let Haylin: BotInstance | undefined;
 dotenv.config({
-  path: path.join(__dirname, '..', '..')
+  path: path.join(__dirname, '..', '..', '..', '.env')
 })
 
-const userIsFunny = false;
 
 Haylin = new BotInstance();
-initializeApi();
+// initializeApi();
 
 export { Haylin }

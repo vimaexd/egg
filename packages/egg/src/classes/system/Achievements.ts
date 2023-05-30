@@ -64,6 +64,8 @@ class Achievements {
    * @returns void
    */
   async giveAchievement(user: GuildMemberExtras, achievementId: string) {
+    return;
+
     const exists = await Haylin.globals.db.guildMemberAchievement.findFirst({
       where: {memberId: user.id, achId: achievementId}
     })

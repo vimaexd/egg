@@ -209,7 +209,7 @@ class Loaders {
         this.log.log(`Loading event ${f.name}`)
         let relativePath = directory.split(path.sep).slice(directory.split(path.sep).indexOf("commands")).join("/")
 
-        import("./" + path.join(relativePath, moduleName))
+        import(path.join(directory, moduleName))
           .then((job) => {
             setInterval(job.run, job.delay, [this.client, this.globals])
             this.log.log(`Loaded job ${f.name}`)
