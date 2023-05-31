@@ -54,9 +54,9 @@ export default class Haylin {
         "MESSAGE"
       ],
       ws: {
-        properties: {
-          $browser: "Discord iOS"
-        }
+        // properties: {
+        //   $browser: "Discord iOS"
+        // }
       }
     });
 
@@ -78,8 +78,9 @@ export default class Haylin {
     await this.client.login(process.env.AUTH_TOKEN)
     this.client.user.setPresence({
       "activities": [
-        {"type": "PLAYING", "name": "🔃 starting up.."}
-      ]
+        {"type": "PLAYING", "name": "🔃 starting up..",}
+      ],
+      "status": "idle"
     })
 
     // Load commands from multiple folders and merge maps
