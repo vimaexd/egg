@@ -4,7 +4,6 @@ import * as Discord from "discord.js";
 import { YarnGlobals } from "../../utils/types.bot"
 import Command from "../commands/Command";
 import Log from "./Log";
-import { getFluteGangId, getPermissionRoles } from "../../static/fluteGang";
 import { handleErr } from "../../utils/ErrorHandler";
 
 /**

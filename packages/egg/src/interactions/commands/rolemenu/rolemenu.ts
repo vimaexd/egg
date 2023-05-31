@@ -3,7 +3,6 @@ import Discord, { ButtonInteraction, GuildMember, MessageEmbed } from "discord.j
 import Command from "../../../classes/commands/Command"
 import dayjs from "dayjs";
 import getGuild from "../../../db/utils/getGuild";
-import { PermissionGroup } from "../../../static/fluteGang";
 
 import { noBtn, deleteBtn } from '../../../static/buttons';
 import { generateButtons, generateMessage, generateRows} from './_generateButtons';

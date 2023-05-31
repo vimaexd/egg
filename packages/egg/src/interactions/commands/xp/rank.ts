@@ -8,7 +8,6 @@ import Xp from '../../../classes/features/Xp';
 import Big from "big.js";
 import getGuild from "../../../db/utils/getGuild";
 import Utils from "../../../classes/Utils";
-import { stringyId } from "../../../static/fluteGang";
 import betaTesters from "../../../static/betaTesters";
 import { handleErr } from "../../../utils/ErrorHandler";
 import "@sentry/tracing";
