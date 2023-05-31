@@ -3,8 +3,9 @@ import Discord from 'discord.js';
 import { imgur } from "../utils/apis";
 import { Haylin } from '../index';
 import { handleErr } from "../utils/ErrorHandler";
+import type { GuildExtras } from "../db/utils/getGuild";
 
-const updateBannerForGuild = async (guildProfile: any) => {
+const updateBannerForGuild = async (guildProfile: GuildExtras) => {
   if(guildProfile.bannerAlbumId == null) return;
 
   let req;
@@ -13,6 +14,7 @@ const updateBannerForGuild = async (guildProfile: any) => {
   } catch(_) { null }
 
   if(req.status != 200) return;
+
   
   const images = req.data.data.images
     .filter((image: any) => {
@@ -26,14 +28,19 @@ const updateBannerForGuild = async (guildProfile: any) => {
 
   // select a random image and set it as the banner of the Discord Guild
   const randomImage = images[Math.floor(Math.random() * images.length)];
-  const guild = await Haylin.client.guilds.fetch(guildProfile.guildId);
+
+  let guild;
+  try {
+    guild = await Haylin.client.guilds.fetch(guildProfile.id);
+  } catch(err) {
+    handleErr("error fetching guild: " + err)
+  }
 
   try {
     await guild.setBanner(randomImage, `Randomly from Imgur album: https://imgur.com/a/${guildProfile.bannerAlbumId}`)
   } catch(err) {
     handleErr("error setting banner: " + err)
   }
-
 }
 
 const delay = 60000 * 30 // every 30 minutes

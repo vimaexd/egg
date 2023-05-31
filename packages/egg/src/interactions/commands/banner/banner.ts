@@ -31,6 +31,11 @@ const Cmd = new Command({
             required: true
           }
         ]
+      },
+      {
+        name: "rotate",
+        description: "Forces a rotation of the banner from the album",
+        type: Constants.ApplicationCommandOptionTypes.SUB_COMMAND,
       }
     ]
 }, async (client, interaction, globals) => {
@@ -77,9 +82,19 @@ const Cmd = new Command({
         }
       })
 
-      await updateBannerForGuild(interaction.guild)
+      updateBannerForGuild(guild)
 
       interaction.reply(`✅ Dynamic Banner has been set to the album ${albumId}`)
+      break;
+    
+    case "rotate":
+      // check if album exists in db
+      if(guild.bannerAlbumId == null) {
+        return interaction.reply(`❌ No album ID has been set. Please run /banner setalbumid`)
+      }
+
+      updateBannerForGuild(guild)
+      interaction.reply(`✅ Banner has been forced to rotate`)
       break;
   }
 })

@@ -10,7 +10,7 @@ import {
 import { Guild as DiscordGuild } from "discord.js";
 import { Haylin as Haylin } from '../../index';
 
-type GuildExtras = Guild & {
+export type GuildExtras = Guild & {
   roleMenu:  GuildRoleMenuOption[];
   rbResults: RatioBattleResult[];
   // members: GuildMember[];
