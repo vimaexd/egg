@@ -11,7 +11,9 @@ const updateBannerForGuild = async (guildProfile: GuildExtras) => {
   let req;
   try {
     req = await imgur.get<any>(`/album/${guildProfile.bannerAlbumId}`)
-  } catch(_) { null }
+  } catch(err) { 
+    handleErr("error fetching album: " + err)
+  }
 
   if(req.status != 200) return;
 
