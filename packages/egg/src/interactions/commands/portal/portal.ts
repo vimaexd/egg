@@ -162,10 +162,10 @@ const Cmd = new Command({
         });
       }
 
-      if(!(linkcode in Portal.linkCodes))
+      if(!Portal.linkCodes.hasOwnProperty(linkcode))
         return interaction.reply({ content: "❌ That link code is invalid! Please make sure you entered it correctly.", ephemeral: true });
       
-      const linkFrom = interaction.guild.channels.cache.get(Portal.linkCodes[linkcode].fromChannelId);
+      const linkFrom = interaction.client.guilds.cache.get(Portal.linkCodes[linkcode].fromServerId).channels.cache.get(Portal.linkCodes[linkcode].fromChannelId);
       if(!linkFrom) return interaction.reply({ content: "❌ That link code is invalid! Please make sure you entered it correctly.", ephemeral: true });
 
 

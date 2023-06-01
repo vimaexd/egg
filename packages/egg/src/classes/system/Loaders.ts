@@ -84,7 +84,7 @@ class Loaders {
           description: value.meta.description,
           options: value.meta.options,
           type: value.meta.type || "CHAT_INPUT",
-          defaultMemberPermissions: (value.meta.restrict) ? Discord.Permissions.FLAGS.MANAGE_GUILD : Discord.Permissions.DEFAULT,
+          defaultMemberPermissions: (value.meta.restrict) && Discord.Permissions.FLAGS.MANAGE_GUILD,
         })
       })
 
