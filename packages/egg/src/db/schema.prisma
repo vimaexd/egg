@@ -127,3 +127,11 @@ model GuildXPBlacklistedChannel {
 
   channelId String
 }
+
+model PortalRelationship {
+  id        String          @id @default(uuid()) 
+  guildIdA  String
+  guildIdB  String
+  channelA  String
+  channelB  String
+}
