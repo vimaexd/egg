@@ -6,17 +6,17 @@ import { handleErr } from "../utils/ErrorHandler";
 import type { GuildExtras } from "../db/utils/getGuild";
 
 const updateBannerForGuild = async (guildProfile: GuildExtras) => {
-  if(guildProfile.bannerAlbumId == null) return;
+  if(guildProfile.bannerAlbumId == null || guildProfile.bannerAlbumId == "") return;
 
   let req;
   try {
     req = await imgur.get<any>(`/album/${guildProfile.bannerAlbumId}`)
   } catch(err) { 
-    handleErr("error fetching album: " + err)
+    // invalid album perhaps? non-200s will go here
+    return;
+    
+    // handleErr("error fetching album: " + err)
   }
-
-  if(req.status != 200) return;
-
   
   const images = req.data.data.images
     .filter((image: any) => {
