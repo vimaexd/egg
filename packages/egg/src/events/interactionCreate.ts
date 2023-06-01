@@ -10,7 +10,6 @@ import BtnRolemenuHandler from '../interactions/buttons/rolemenu';
 import { handleErr } from "../utils/ErrorHandler";
 
 export default async (_interaction: Discord.Interaction, client: Discord.Client, globals: YarnGlobals) => {
-  if(_interaction.channel.type == "DM") return;
 
   try {
     let interaction: any;
@@ -18,6 +17,7 @@ export default async (_interaction: Discord.Interaction, client: Discord.Client,
     switch(_interaction.type){
       case "APPLICATION_COMMAND":
         interaction = _interaction as CommandInteraction;
+        if(interaction.channel.type == "DM") return;
         if(interaction.user.bot) return;
         let cmd: Command = globals.commands.get(interaction.commandName);
   

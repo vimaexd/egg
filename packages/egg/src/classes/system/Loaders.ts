@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as Discord from "discord.js";
-import { YarnGlobals } from "../../utils/types.bot"
+import { YarnGlobals, } from "../../utils/types.bot"
 import Command from "../commands/Command";
 import Log from "./Log";
 import { handleErr } from "../../utils/ErrorHandler";
@@ -84,7 +84,7 @@ class Loaders {
           description: value.meta.description,
           options: value.meta.options,
           type: value.meta.type || "CHAT_INPUT",
-          defaultPermission: (value.meta.restrict == undefined)
+          defaultMemberPermissions: (value.meta.restrict) ? Discord.Permissions.FLAGS.MANAGE_GUILD : Discord.Permissions.DEFAULT,
         })
       })
 
@@ -169,7 +169,6 @@ class Loaders {
         if (f.isDirectory()) return;
         if (!f.name.endsWith(".js") && !f.name.endsWith(".ts")) return;
 
-        this.log.log(`Loading event ${f.name}`)
         let relativePath = directory.split(path.sep).slice(directory.split(path.sep).indexOf("commands")).join("/")
 
         import(path.join(directory, moduleName))

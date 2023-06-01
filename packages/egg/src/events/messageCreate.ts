@@ -6,6 +6,7 @@ import xp from "../classes/features/Xp";
 import getGuildMember from "../db/utils/getGuildMember";
 import dayjs from "dayjs";
 import { reactionWords, wordBank } from "../classes/features/ReactionWords";
+import Portal from "../classes/features/Portal";
 
 
 export default async (message: Discord.Message, client: Discord.Client, globals: YarnGlobals) => {
@@ -13,6 +14,7 @@ export default async (message: Discord.Message, client: Discord.Client, globals:
   if(message.partial) return;
   
   reactionWords.runReactionWords(message);
+  Portal.onMessage(message);
 
   xp.runXp(message);
 }

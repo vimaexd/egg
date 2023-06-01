@@ -19,4 +19,7 @@
       "src/**/*",
       "assets/**/*",
   ],
+  "ts-node": {
+    "require": ["tsconfig-paths/register"]
+  }
 }
