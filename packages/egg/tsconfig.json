@@ -10,10 +10,13 @@
       "sourceMap": false,
       "outDir": "dist",
       "resolveJsonModule": true,
-      "strictNullChecks": false
+      "strictNullChecks": false,
+      "paths": {
+        "@blob/*": ["./src/*"]
+      }
   },
   "include": [
       "src/**/*",
       "assets/**/*",
-  ]
+  ],
 }

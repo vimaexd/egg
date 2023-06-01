@@ -19,7 +19,7 @@
     "scope": "typescript",
     "prefix": "cmd",
     "body": [
-      "import Command from \"../../../classes/Commands/Command\"",
+      "import Command from \"@blob/classes/commands/Command\"",
       "",
       "const Cmd = new Command({",
       "    enabled: true,       ",
